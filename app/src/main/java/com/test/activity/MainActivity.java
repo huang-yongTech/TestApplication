@@ -14,9 +14,11 @@ import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
-        Observer<Integer> observer = new Observer<Integer>() {
+        Observer<String> observer = new Observer<String>() {
             @Override
             public void onSubscribe(Disposable d) {
                 Log.i(TAG, "onSubscribe--运行线程：" + Thread.currentThread().getName());
@@ -47,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onNext(Integer integer) {
+            public void onNext(String integer) {
                 Log.i(TAG, "onNext: " + integer + " --运行线程：" + Thread.currentThread().getName());
                 mToolbar.setTitle(integer + "");
             }
@@ -70,16 +72,26 @@ public class MainActivity extends AppCompatActivity {
                 Log.i(TAG, "subscribe--运行线程：" + Thread.currentThread().getName());
                 emitter.onNext(1);
                 emitter.onNext(2);
-                try {
-                    TimeUnit.MILLISECONDS.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    TimeUnit.MILLISECONDS.sleep(1000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
                 emitter.onNext(3);
                 emitter.onComplete();
             }
         }).subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Function<Integer, ObservableSource<String>>() {
+                    @Override
+                    public ObservableSource<String> apply(Integer integer) {
+                        if (integer == 2) {
+                            return Observable.just("忽略偶数");
+                        }
+                        return Observable.just(String.valueOf(integer));
+                    }
+                })
                 .subscribe(observer);
     }
 }
