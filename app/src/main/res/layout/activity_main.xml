@@ -16,8 +16,20 @@
             android:layout_height="?android:attr/actionBarSize"
             android:background="@color/colorPrimary"
             app:popupTheme="@style/PopupOverlay" />
-
     </android.support.design.widget.AppBarLayout>
 
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/main_people_et"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp" />
 
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/main_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:text="提交" />
 </LinearLayout>
