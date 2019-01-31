@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioButton xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/folder_list_item"
+    android:layout_width="match_parent"
+    android:layout_height="68dp"
+    android:button="@null"
+    android:drawableTop="@mipmap/folder_selected"
+    android:gravity="center"
+    android:paddingBottom="8dp"
+    android:paddingEnd="8dp"
+    android:paddingStart="8dp"
+    android:paddingTop="8dp"
+    android:textColor="@color/grey_system"
+    android:textSize="12sp" />
