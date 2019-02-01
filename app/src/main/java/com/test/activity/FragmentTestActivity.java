@@ -3,37 +3,29 @@ package com.test.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.test.R;
 import com.test.base.BaseActivity;
-import com.test.fragment.ChildFragment;
 import com.test.fragment.HomeFragment;
-import com.test.rxbus.RxBus;
-import com.test.rxbus.Subscribe;
-import com.test.util.Constant;
 
-import me.yokeyword.fragmentation.SupportActivity;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class FragmentTestActivity extends BaseActivity {
+    @BindView(R.id.fragment_test_toolbar)
+    Toolbar mToolbar;
     private boolean mIsExit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_test);
+        ButterKnife.bind(this);
 
-        RxBus.getDefault().register(this);
-
+        mToolbar.setTitle("Fragment回退栈测试");
         addFragment(R.id.fragment_test_frame_layout, new HomeFragment());
-    }
-
-    @Subscribe(code = Constant.REPLACE_FRAGMENT)
-    public void replaceFragment(String item) {
-        int level = 0;
-        level++;
-        replaceFragmentToBackStackInAnimation(R.id.fragment_test_frame_layout, ChildFragment.newInstance("child级数" + level));
     }
 
     @Override
@@ -61,6 +53,5 @@ public class FragmentTestActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        RxBus.getDefault().unRegister(this);
     }
 }
