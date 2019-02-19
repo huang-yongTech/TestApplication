@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.test.R;
+import com.test.util.Constant;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @OnClick({R.id.main_fragment_test_btn, R.id.main_realm_test_btn})
+    @OnClick({R.id.main_fragment_test_btn, R.id.main_realm_test_btn, R.id.main_handler_thread_btn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.main_fragment_test_btn:
@@ -37,6 +38,13 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.main_realm_test_btn:
                 startActivity(new Intent(this, RealmTestActivity.class));
+                break;
+            case R.id.main_handler_thread_btn:
+                Bundle bundle = new Bundle();
+                bundle.putString(Constant.TYPE, Constant.TYPE_HANDLER_THREAD);
+                Intent intent = new Intent(this, CommonHostActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
                 break;
         }
     }
