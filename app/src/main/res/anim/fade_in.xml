@@ -3,7 +3,7 @@
     android:shareInterpolator="false">
     <!--改变透明度模式-->
     <alpha
-        android:duration="500"
+        android:duration="300"
         android:fromAlpha="0"
         android:toAlpha="1" />
 </set>
