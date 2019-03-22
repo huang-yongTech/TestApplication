@@ -1,4 +1,4 @@
-package com.test.rxbus;
+package com.test.library.rxbus;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.test.util;
+package com.test.library.util;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -110,7 +110,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
         pw.print("App Version: ");
         pw.print(pi.versionName);
         pw.print('_');
-        pw.println(pi.getLongVersionCode());
+        pw.println(pi.versionCode);
 
         //android版本号
         pw.print("OS Version: ");

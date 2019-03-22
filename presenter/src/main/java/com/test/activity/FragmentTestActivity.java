@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.test.R;
 import com.test.base.BaseActivity;
 import com.test.fragment.HomeFragment;
+import com.test.library.util.FixMemLeak;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,5 +54,6 @@ public class FragmentTestActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        FixMemLeak.fixLeak(this);
     }
 }

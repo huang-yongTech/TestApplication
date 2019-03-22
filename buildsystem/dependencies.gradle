@@ -58,6 +58,9 @@ ext {
     aRouterVersion = '1.4.1'
     aRouterCompilerVersion = '1.2.2'
 
+    //内存泄漏检测
+    leakcanaryVersion = '1.6.3'
+
     //Testing
     junitVersion = '4.12'
 }

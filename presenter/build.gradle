@@ -42,6 +42,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation project(':library')
+    implementation project(':base')
 
     implementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
     implementation "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
@@ -67,4 +68,13 @@ dependencies {
     //组件化路由
     implementation "com.alibaba:arouter-api:$rootProject.aRouterVersion"
     annotationProcessor "com.alibaba:arouter-compiler:$rootProject.aRouterCompilerVersion"
+
+    //内存泄漏检测
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.leakcanaryVersion"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakcanaryVersion"
+    testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakcanaryVersion"
+    // Optional, if you use support library fragments:
+    debugImplementation "com.squareup.leakcanary:leakcanary-support-fragment:$rootProject.leakcanaryVersion"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-support-fragment:$rootProject.leakcanaryVersion"
+    testImplementation "com.squareup.leakcanary:leakcanary-support-fragment:$rootProject.leakcanaryVersion"
 }

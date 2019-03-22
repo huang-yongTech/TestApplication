@@ -8,7 +8,8 @@ import android.view.View;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.test.R;
-import com.test.util.Constant;
+import com.test.library.util.Constant;
+import com.test.library.util.FixMemLeak;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick({R.id.main_fragment_test_btn, R.id.main_realm_test_btn, R.id.main_handler_thread_btn,
-            R.id.main_router_btn})
+            R.id.main_handler_remove_btn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.main_fragment_test_btn:
@@ -42,19 +43,27 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, RealmTestActivity.class));
                 break;
             case R.id.main_handler_thread_btn:
-                Bundle bundle = new Bundle();
-                bundle.putString(Constant.TYPE, Constant.TYPE_HANDLER_THREAD);
-                Intent intent = new Intent(this, CommonHostActivity.class);
-                intent.putExtras(bundle);
-                startActivity(intent);
-                break;
-            case R.id.main_router_btn:
+                Bundle commonBundle = new Bundle();
+                commonBundle.putString(Constant.TYPE, Constant.TYPE_HANDLER_THREAD);
                 ARouter.getInstance()
-                        .build("/presenter/settings")
-                        .withString("url", "测试url")
-                        .withString("title", "测试title")
+                        .build("/presenter/commonHost")
+                        .withBundle(Constant.TYPE_COMMON_BUNDLE, commonBundle)
+                        .navigation();
+                break;
+            case R.id.main_handler_remove_btn:
+                Bundle handlerBundle = new Bundle();
+                handlerBundle.putString(Constant.TYPE, Constant.TYPE_HANDLER_REMOVE);
+                ARouter.getInstance()
+                        .build("/presenter/commonHost")
+                        .withBundle(Constant.TYPE_COMMON_BUNDLE, handlerBundle)
                         .navigation();
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        FixMemLeak.fixLeak(this);
     }
 }

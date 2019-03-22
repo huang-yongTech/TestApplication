@@ -1,4 +1,4 @@
-package com.test.rxbus;
+package com.test.library.rxbus;
 
 /**
  * RxBus data

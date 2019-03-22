@@ -10,7 +10,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.SettingsActivity"/>
         <activity
             android:name=".activity.WelcomeActivity"
             android:theme="@style/WelcomeStyle">
@@ -23,10 +22,17 @@
         </activity>
         <activity
             android:name=".activity.MainActivity"
-            android:label="@string/app_name" />
-        <activity android:name=".activity.CommonHostActivity" />
-        <activity android:name=".activity.FragmentTestActivity" />
-        <activity android:name=".activity.RealmTestActivity" />
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.CommonHostActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.FragmentTestActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.RealmTestActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

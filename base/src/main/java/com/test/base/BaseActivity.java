@@ -8,8 +8,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 
-import com.test.R;
-
 /**
  * Created by huangyong on 2017/8/21.
  * activity基类

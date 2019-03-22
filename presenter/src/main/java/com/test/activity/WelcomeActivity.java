@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
 
 import com.test.R;
+import com.test.library.util.FixMemLeak;
 
 import java.util.concurrent.TimeUnit;
 
@@ -76,5 +77,6 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         mDisposable.dispose();
+        FixMemLeak.fixLeak(this);
     }
 }

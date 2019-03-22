@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragment.HandlerRemoveFragment">
+
+    <include layout="@layout/public_toolbar" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/handler_remove_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/handler_remove_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:text="HandlerRemove按钮点击" />
+</LinearLayout>

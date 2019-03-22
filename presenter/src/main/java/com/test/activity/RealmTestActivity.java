@@ -10,6 +10,7 @@ import com.test.R;
 import com.test.cache.AppDatabase;
 import com.test.cache.PeopleDataSource;
 import com.test.entity.People;
+import com.test.library.util.FixMemLeak;
 
 import java.util.List;
 
@@ -78,6 +79,7 @@ public class RealmTestActivity extends AppCompatActivity {
         if (mCompositeDisposable != null) {
             mCompositeDisposable.clear();
         }
+        FixMemLeak.fixLeak(this);
     }
 
     //    private void init() {

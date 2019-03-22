@@ -7,10 +7,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.test.R;
+import com.test.fragment.HandlerRemoveFragment;
 import com.test.fragment.HandlerThreadFragment;
-import com.test.util.Constant;
+import com.test.library.util.Constant;
+import com.test.library.util.FixMemLeak;
 
+@Route(path = "/presenter/commonHost")
 public class CommonHostActivity extends AppCompatActivity {
 
     @Override
@@ -23,7 +27,7 @@ public class CommonHostActivity extends AppCompatActivity {
 
     private void init() {
         Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
+        Bundle bundle = intent.getBundleExtra(Constant.TYPE_COMMON_BUNDLE);
 
         if (bundle == null) {
             return;
@@ -38,6 +42,9 @@ public class CommonHostActivity extends AppCompatActivity {
             case Constant.TYPE_HANDLER_THREAD:
                 changeFragment(new HandlerThreadFragment());
                 break;
+            case Constant.TYPE_HANDLER_REMOVE:
+                changeFragment(new HandlerRemoveFragment());
+                break;
         }
     }
 
@@ -46,5 +53,11 @@ public class CommonHostActivity extends AppCompatActivity {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.common_host_fragment_container, fragment);
         transaction.commit();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        FixMemLeak.fixLeak(this);
     }
 }

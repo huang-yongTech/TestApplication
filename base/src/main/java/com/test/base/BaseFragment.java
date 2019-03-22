@@ -3,9 +3,6 @@ package com.test.base;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
-import com.test.R;
-
-
 /**
  * Created by huangyong on 2017/8/29.
  * Fragment基类，如果有Fragment包含子Fragment，则可以继承该基类

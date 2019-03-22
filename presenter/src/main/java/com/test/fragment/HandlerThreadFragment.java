@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 
 import com.test.R;
 
+import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -41,6 +43,10 @@ public class HandlerThreadFragment extends Fragment {
     private Handler mWorkerHandler;
     private Handler mMainHandler;
     private HandlerThread mHandlerThread;
+    private Handler.Callback mMainCallback;
+    private Handler.Callback mWorkCallBack;
+
+    private boolean mCanceled;
 
     private String mParam1;
     private String mParam2;
@@ -86,44 +92,73 @@ public class HandlerThreadFragment extends Fragment {
     private void init() {
         mToolbar.setTitle("HandlerThread测试");
 
-        mMainHandler = new Handler(Looper.getMainLooper()) {
+        //匿名内部类会隐式持有外部类的引用，因此只要这里被执行了，就会出现内存泄漏错误
+        mMainCallback = new Handler.Callback() {
             @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                mHandlerThreadTv.setText(String.valueOf(msg.arg1));
+            public boolean handleMessage(Message msg) {
+                switch (msg.what) {
+                    case 0:
+                        Log.i(TAG, "handleMessage: callback代码执行");
+                        mHandlerThreadTv.setText(String.valueOf(msg.obj));
+                        Log.i(TAG, "handleMessage: 打印消息：" + msg.obj);
+                        break;
+                }
+                return true;
             }
         };
+        mMainHandler = new Handler(Looper.getMainLooper(), mMainCallback);
 
         mHandlerThread = new HandlerThread("HandlerThread");
         mHandlerThread.start();
 
-        mWorkerHandler = new Handler(mHandlerThread.getLooper()) {
+        mWorkCallBack = new Handler.Callback() {
             @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
+            public boolean handleMessage(Message msg) {
                 switch (msg.what) {
                     case 0:
+                        //这里可以执行耗时请求
+                        //模拟耗时请求
+                        try {
+                            TimeUnit.SECONDS.sleep(10);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         Log.i(TAG, "handleMessage: 线程名：" + Thread.currentThread().getName());
-                        Message message = Message.obtain(msg);
-                        mMainHandler.sendMessage(message);
+
+                        if (!mCanceled) {
+                            Message message = Message.obtain(msg);
+                            mMainHandler.sendMessage(message);
+                        }
                         break;
                 }
+                return true;
             }
         };
+        mWorkerHandler = new Handler(mHandlerThread.getLooper(), mWorkCallBack);
     }
 
     @OnClick(R.id.handler_thread_btn)
     public void onViewClicked() {
         Message message = Message.obtain();
         message.what = 0;
-        message.arg1 = 11111;
+        message.obj = "这是主线程按钮的点击事件";
         mWorkerHandler.sendMessage(message);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-        mHandlerThread.quitSafely();
+        mCanceled = true;
+//        mHandlerThread.quitSafely();
+        mHandlerThread.quit();
+        //这种方法只能移除当前已经在消息队列中的消息，不能移除界面结束后还在运行的线程发送的消息，所以还会导致内存溢出
+//        mWorkerHandler.removeCallbacksAndMessages(null);
+//        mMainHandler.removeCallbacksAndMessages(null);
     }
 }
