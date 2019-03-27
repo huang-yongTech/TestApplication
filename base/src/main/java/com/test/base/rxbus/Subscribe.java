@@ -1,4 +1,4 @@
-package com.test.library.rxbus;
+package com.test.base.rxbus;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

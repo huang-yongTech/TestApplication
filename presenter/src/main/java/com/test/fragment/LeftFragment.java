@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.test.R;
 import com.test.adapter.FragmentListAdapter;
-import com.test.library.rxbus.RxBus;
-import com.test.library.util.Constant;
+import com.test.base.rxbus.RxBus;
+import com.test.base.Constant;
 
 import java.util.ArrayList;
 import java.util.List;

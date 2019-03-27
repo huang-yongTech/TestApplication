@@ -1,4 +1,4 @@
-package com.test.library.util;
+package com.test.base.util;
 
 import android.content.Context;
 import android.view.inputmethod.InputMethodManager;

@@ -5,12 +5,13 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.test.R;
-import com.test.cache.AppDatabase;
-import com.test.cache.PeopleDataSource;
-import com.test.entity.People;
-import com.test.library.util.FixMemLeak;
+import com.test.data.cache.AppDatabase;
+import com.test.data.cache.PeopleDataSource;
+import com.test.data.entity.People;
+import com.test.base.util.FixMemLeak;
 
 import java.util.List;
 
@@ -68,6 +69,8 @@ public class RealmTestActivity extends AppCompatActivity {
                 .subscribe(new Action() {
                     @Override
                     public void run() {
+                        Toast.makeText(RealmTestActivity.this, "插入成功", Toast.LENGTH_SHORT).show();
+                        mPeopleEt.setText("");
                         Log.i(TAG, "run: 插入成功！");
                     }
                 }));

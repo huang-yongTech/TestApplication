@@ -2,8 +2,9 @@ apply plugin: 'com.android.library'
 
 android {
     def globalConfiguration = rootProject.extensions.getByName("ext")
-
     compileSdkVersion globalConfiguration["androidCompileSdkVersion"]
+
+
 
     defaultConfig {
         minSdkVersion globalConfiguration["androidMinSdkVersion"]
@@ -11,15 +12,15 @@ android {
         versionCode globalConfiguration["androidVersionCode"]
         versionName globalConfiguration["androidVersionName"]
 
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        //ARouter路由配置
+        //指定room.schemaLocation生成的文件路径
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = [AROUTER_MODULE_NAME: project.getName()]
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
-
     }
 
     buildTypes {
@@ -39,9 +40,10 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxJavaVersion"
     implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroidVersion"
 
-    //组件化路由
-    implementation "com.alibaba:arouter-api:$rootProject.aRouterVersion"
-    annotationProcessor "com.alibaba:arouter-compiler:$rootProject.aRouterCompilerVersion"
+    //Room依赖
+    api "android.arch.persistence.room:runtime:${rootProject.archVersion}"
+    annotationProcessor "android.arch.persistence.room:compiler:${rootProject.archVersion}"
+    api "android.arch.persistence.room:rxjava2:${rootProject.archVersion}"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

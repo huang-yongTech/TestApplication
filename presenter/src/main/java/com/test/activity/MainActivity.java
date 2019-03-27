@@ -8,8 +8,8 @@ import android.view.View;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.test.R;
-import com.test.library.util.Constant;
-import com.test.library.util.FixMemLeak;
+import com.test.base.Constant;
+import com.test.base.util.FixMemLeak;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,14 +32,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick({R.id.main_fragment_test_btn, R.id.main_realm_test_btn, R.id.main_handler_thread_btn,
-            R.id.main_handler_remove_btn})
+            R.id.main_web_view_btn, R.id.main_other_module_btn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.main_fragment_test_btn:
                 startActivity(new Intent(this, FragmentTestActivity.class));
                 break;
             case R.id.main_realm_test_btn:
-                startActivity(new Intent(this, RealmTestActivity.class));
+                 startActivity(new Intent(this, RealmTestActivity.class));
                 break;
             case R.id.main_handler_thread_btn:
                 Bundle commonBundle = new Bundle();
@@ -50,12 +49,21 @@ public class MainActivity extends AppCompatActivity {
                         .withBundle(Constant.TYPE_COMMON_BUNDLE, commonBundle)
                         .navigation();
                 break;
-            case R.id.main_handler_remove_btn:
+            case R.id.main_web_view_btn:
                 Bundle handlerBundle = new Bundle();
                 handlerBundle.putString(Constant.TYPE, Constant.TYPE_HANDLER_REMOVE);
                 ARouter.getInstance()
                         .build("/presenter/commonHost")
                         .withBundle(Constant.TYPE_COMMON_BUNDLE, handlerBundle)
+                        .navigation();
+                break;
+            case R.id.main_other_module_btn:
+                Bundle otherBundle = new Bundle();
+                otherBundle.putString("url", "这是主界面传递过来的Url");
+                otherBundle.putString("title", "这是主界面传递过来的Title");
+                ARouter.getInstance()
+                        .build("/library/otherActivity")
+                        .with(otherBundle)
                         .navigation();
                 break;
         }

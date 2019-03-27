@@ -12,9 +12,9 @@ import android.widget.RadioButton;
 
 import com.test.R;
 import com.test.base.BaseFragment;
-import com.test.library.rxbus.RxBus;
-import com.test.library.rxbus.Subscribe;
-import com.test.library.util.Constant;
+import com.test.base.rxbus.RxBus;
+import com.test.base.rxbus.Subscribe;
+import com.test.base.Constant;
 
 import java.util.Objects;
 

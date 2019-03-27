@@ -1,11 +1,11 @@
-package com.test.cache;
+package com.test.data.cache;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-import com.test.entity.People;
+import com.test.data.entity.People;
 
 /**
  * Created by huangyong on 2019/1/17

@@ -9,10 +9,10 @@ import android.os.Bundle;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.test.R;
-import com.test.fragment.HandlerRemoveFragment;
+import com.test.fragment.WebViewFragment;
 import com.test.fragment.HandlerThreadFragment;
-import com.test.library.util.Constant;
-import com.test.library.util.FixMemLeak;
+import com.test.base.Constant;
+import com.test.base.util.FixMemLeak;
 
 @Route(path = "/presenter/commonHost")
 public class CommonHostActivity extends AppCompatActivity {
@@ -26,6 +26,9 @@ public class CommonHostActivity extends AppCompatActivity {
     }
 
     private void init() {
+        //这里采用传统的方式获取ARouter传递过来的参数是因为我们知道ARouter传值的方式
+        //当在团队采用模块化或者组件化开发时，我们往往并不知道ARouter的传值方式，
+        //在这种情况下，我们应该通过注解的方式来获取传值参数
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra(Constant.TYPE_COMMON_BUNDLE);
 
@@ -43,7 +46,7 @@ public class CommonHostActivity extends AppCompatActivity {
                 changeFragment(new HandlerThreadFragment());
                 break;
             case Constant.TYPE_HANDLER_REMOVE:
-                changeFragment(new HandlerRemoveFragment());
+                changeFragment(new WebViewFragment());
                 break;
         }
     }

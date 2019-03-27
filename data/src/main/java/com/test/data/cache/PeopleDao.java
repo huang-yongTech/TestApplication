@@ -1,14 +1,13 @@
-package com.test.cache;
+package com.test.data.cache;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
-import com.test.entity.People;
+import com.test.data.entity.People;
 
 import java.util.List;
 
-import io.reactivex.Flowable;
 import io.reactivex.Single;
 
 /**
@@ -19,7 +18,7 @@ public interface PeopleDao {
     @Insert
     void insert(People people);
 
+    //Flowable在数据表有更新时会自动查询数据，因此这里需要使用Single
     @Query(("select * from people"))
-    //Flowable在数据表有更新时会自动查询数据
     Single<List<People>> queryPeopleList();
 }

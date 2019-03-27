@@ -9,7 +9,7 @@ import android.widget.Toast;
 import com.test.R;
 import com.test.base.BaseActivity;
 import com.test.fragment.HomeFragment;
-import com.test.library.util.FixMemLeak;
+import com.test.base.util.FixMemLeak;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

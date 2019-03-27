@@ -1,11 +1,10 @@
-package com.test.cache;
+package com.test.data.cache;
 
-import com.test.entity.People;
+import com.test.data.entity.People;
 
 import java.util.List;
 
 import io.reactivex.Completable;
-import io.reactivex.Flowable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;

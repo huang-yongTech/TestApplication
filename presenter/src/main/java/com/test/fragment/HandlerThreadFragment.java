@@ -43,10 +43,6 @@ public class HandlerThreadFragment extends Fragment {
     private Handler mWorkerHandler;
     private Handler mMainHandler;
     private HandlerThread mHandlerThread;
-    private Handler.Callback mMainCallback;
-    private Handler.Callback mWorkCallBack;
-
-    private boolean mCanceled;
 
     private String mParam1;
     private String mParam2;
@@ -93,7 +89,9 @@ public class HandlerThreadFragment extends Fragment {
         mToolbar.setTitle("HandlerThread测试");
 
         //匿名内部类会隐式持有外部类的引用，因此只要这里被执行了，就会出现内存泄漏错误
-        mMainCallback = new Handler.Callback() {
+        //内部类隐式持有外部类的引用，当内部类的生命周期大于外部类的生命周期时，就会出现内存泄漏
+        //这种情况下可以通过HandlerThread来解决
+        Handler.Callback mainCallback = new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
@@ -106,35 +104,35 @@ public class HandlerThreadFragment extends Fragment {
                 return true;
             }
         };
-        mMainHandler = new Handler(Looper.getMainLooper(), mMainCallback);
+        mMainHandler = new Handler(Looper.getMainLooper(), mainCallback);
 
         mHandlerThread = new HandlerThread("HandlerThread");
         mHandlerThread.start();
 
-        mWorkCallBack = new Handler.Callback() {
+        Handler.Callback workCallBack = new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
                     case 0:
-                        //这里可以执行耗时请求
-                        //模拟耗时请求
-                        try {
-                            TimeUnit.SECONDS.sleep(10);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                        //这样的代码是错误的，由于内部类隐式持有外部类的引用，当内部类的生命周期超过外部类的生命周期时，
+                        //就会造成外部类对象始终无法被GC回收，因此出现内存泄漏，
+                        //在开发中绝对不要出现这样的代码
+                        //如果内部类中有线程，那么在外部类的结束生命周期中一定要把这个线程终结掉，否则就会出现内存泄漏，原因如上
+//                        try {
+//                            TimeUnit.SECONDS.sleep(20);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
                         Log.i(TAG, "handleMessage: 线程名：" + Thread.currentThread().getName());
 
-                        if (!mCanceled) {
-                            Message message = Message.obtain(msg);
-                            mMainHandler.sendMessage(message);
-                        }
+                        Message message = Message.obtain(msg);
+                        mMainHandler.sendMessage(message);
                         break;
                 }
                 return true;
             }
         };
-        mWorkerHandler = new Handler(mHandlerThread.getLooper(), mWorkCallBack);
+        mWorkerHandler = new Handler(mHandlerThread.getLooper(), workCallBack);
     }
 
     @OnClick(R.id.handler_thread_btn)
@@ -154,11 +152,10 @@ public class HandlerThreadFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-        mCanceled = true;
 //        mHandlerThread.quitSafely();
         mHandlerThread.quit();
-        //这种方法只能移除当前已经在消息队列中的消息，不能移除界面结束后还在运行的线程发送的消息，所以还会导致内存溢出
-//        mWorkerHandler.removeCallbacksAndMessages(null);
-//        mMainHandler.removeCallbacksAndMessages(null);
+        //这种方法只能移除当前已经在消息队列中的消息，不能移除界面结束后还在运行的线程发送的消息
+        mWorkerHandler.removeCallbacksAndMessages(null);
+        mMainHandler.removeCallbacksAndMessages(null);
     }
 }

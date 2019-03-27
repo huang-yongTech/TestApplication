@@ -1,4 +1,4 @@
-package com.test.library.util;
+package com.test.base;
 
 /**
  * Created by huangyong on 2019/1/31

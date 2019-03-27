@@ -33,7 +33,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="30dp"
-                android:text="Fragment回退栈测试" />
+                android:text="Fragment回退栈测试"
+                android:textAllCaps="false" />
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/main_realm_test_btn"
@@ -41,7 +42,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="30dp"
-                android:text="Realm测试" />
+                android:text="Realm测试"
+                android:textAllCaps="false" />
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/main_handler_thread_btn"
@@ -49,15 +51,26 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="30dp"
-                android:text="HandlerThread测试" />
+                android:text="HandlerThread测试"
+                android:textAllCaps="false" />
 
             <android.support.v7.widget.AppCompatButton
-                android:id="@+id/main_handler_remove_btn"
+                android:id="@+id/main_web_view_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="30dp"
-                android:text="handler移除callback测试" />
+                android:text="WebView测试"
+                android:textAllCaps="false" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/main_other_module_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:text="跳转到其他module_activity"
+                android:textAllCaps="false" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

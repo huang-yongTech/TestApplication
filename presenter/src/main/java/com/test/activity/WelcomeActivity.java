@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
 
 import com.test.R;
-import com.test.library.util.FixMemLeak;
+import com.test.base.util.FixMemLeak;
 
 import java.util.concurrent.TimeUnit;
 
