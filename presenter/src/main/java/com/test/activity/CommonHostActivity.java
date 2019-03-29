@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.test.R;
 import com.test.fragment.WebViewFragment;
 import com.test.fragment.HandlerThreadFragment;
@@ -47,6 +48,10 @@ public class CommonHostActivity extends AppCompatActivity {
                 break;
             case Constant.TYPE_HANDLER_REMOVE:
                 changeFragment(new WebViewFragment());
+                break;
+            case Constant.TYPE_RECYCLER_VIEW:
+                Fragment fragment = (Fragment) ARouter.getInstance().build("/presenter/recyclerViewFragment").navigation();
+                changeFragment(fragment);
                 break;
         }
     }

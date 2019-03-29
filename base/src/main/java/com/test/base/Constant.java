@@ -9,6 +9,7 @@ public class Constant {
     public static final String TYPE = "type";
     public static final String TYPE_HANDLER_THREAD = "type_handler_thread";
     public static final String TYPE_HANDLER_REMOVE = "type_handler_remove";
+    public static final String TYPE_RECYCLER_VIEW = "type_recycler_view";
 
     public static final String TYPE_COMMON_BUNDLE = "type_common_bundle";
 }

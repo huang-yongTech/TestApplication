@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick({R.id.main_fragment_test_btn, R.id.main_realm_test_btn, R.id.main_handler_thread_btn,
-            R.id.main_web_view_btn, R.id.main_other_module_btn})
+            R.id.main_web_view_btn, R.id.main_other_module_btn,R.id.main_recycler_view_btn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.main_fragment_test_btn:
@@ -64,6 +64,14 @@ public class MainActivity extends AppCompatActivity {
                 ARouter.getInstance()
                         .build("/library/otherActivity")
                         .with(otherBundle)
+                        .navigation();
+                break;
+            case R.id.main_recycler_view_btn:
+                Bundle recyclerBundle = new Bundle();
+                recyclerBundle.putString(Constant.TYPE, Constant.TYPE_RECYCLER_VIEW);
+                ARouter.getInstance()
+                        .build("/presenter/commonHost")
+                        .withBundle(Constant.TYPE_COMMON_BUNDLE, recyclerBundle)
                         .navigation();
                 break;
         }
