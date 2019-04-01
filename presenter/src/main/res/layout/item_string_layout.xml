@@ -3,5 +3,6 @@
     android:id="@+id/recycler_test_tv"
     android:layout_width="match_parent"
     android:layout_height="100dp"
+    android:background="@color/grey_system"
     android:gravity="center"
     android:textSize="16sp" />

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -12,10 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.test.R;
 import com.test.adapter.RecyclerTestAdapter;
-import com.test.widget.GridDividerItemDecoration;
-import com.test.widget.GridItemDecoration;
+import com.test.widget.TimeAxisItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,10 +83,9 @@ public class RecyclerViewFragment extends Fragment {
 
     private void initRecyclerView() {
         Context context = Objects.requireNonNull(getContext());
-        GridLayoutManager layoutManager = new GridLayoutManager(context, 3);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         mRecyclerView.setLayoutManager(layoutManager);
-        GridDividerItemDecoration itemDecoration = new GridDividerItemDecoration(context);
-        itemDecoration.setDrawable(Objects.requireNonNull(context.getDrawable(R.drawable.divider_space)));
+        TimeAxisItemDecoration itemDecoration = new TimeAxisItemDecoration(context);
         mRecyclerView.addItemDecoration(itemDecoration);
         RecyclerTestAdapter adapter = new RecyclerTestAdapter(R.layout.item_string_layout);
         mRecyclerView.setAdapter(adapter);
@@ -96,6 +95,13 @@ public class RecyclerViewFragment extends Fragment {
             list.add("测试数据 " + i);
         }
         adapter.setNewData(list);
+
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                adapter.remove(position);
+            }
+        });
     }
 
     @Override

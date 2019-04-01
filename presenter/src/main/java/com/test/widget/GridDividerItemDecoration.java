@@ -65,6 +65,9 @@ public class GridDividerItemDecoration extends RecyclerView.ItemDecoration {
         drawHorizontal(c, parent);
     }
 
+    /**
+     * 绘制水平分割线
+     */
     private void drawVertical(Canvas canvas, RecyclerView parent) {
         final int spanCount = getSpanCount(parent);
         final int childCount = parent.getChildCount();
@@ -87,6 +90,9 @@ public class GridDividerItemDecoration extends RecyclerView.ItemDecoration {
         }
     }
 
+    /**
+     * 绘制垂直分割线
+     */
     private void drawHorizontal(Canvas canvas, RecyclerView parent) {
         final int spanCount = getSpanCount(parent);
         final int childCount = parent.getChildCount();
@@ -137,19 +143,23 @@ public class GridDividerItemDecoration extends RecyclerView.ItemDecoration {
         int top = 0;
         int bottom = mDividerHeight;
 
-        int eachWidth = (spanCount - 1) * mDividerHeight / spanCount;
-        int dl = mDividerHeight - eachWidth;
+        //计算每列相邻item之间divider所占用的宽度
+        int eachOffset = (spanCount - 1) * mDividerWidth / spanCount;
+        //计算divider实际设置的宽度和eachOffset之间的差值
+        int dl = mDividerWidth - eachOffset;
 
+        //计算每个item的左右偏移量，使得每列各个item所占的宽度能均匀分布
         left = itemPosition % spanCount * dl;
-        right = eachWidth - left;
+        right = eachOffset - left;
 
         if (isLastRow(parent, itemPosition, spanCount, childCount)) {
             bottom = 0;
         }
 
-        if (isLastColumn(parent, itemPosition, spanCount, childCount)) {
-            right = 0;
-        }
+        //由于上面的代码已经计算了item的左右偏移量，所以这里的判断可有可无，保留主要是为了学习下如何判断是否最后一列
+//        if (isLastColumn(parent, itemPosition, spanCount, childCount)) {
+//            right = 0;
+//        }
 
         outRect.set(left, top, right, bottom);
     }
