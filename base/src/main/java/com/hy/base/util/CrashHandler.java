@@ -30,7 +30,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
     private static final String FILE_NAME_SUFFIX = ".trace";
 
     private UncaughtExceptionHandler mDefaultCrashHandler;
-    private WeakReference<Context> mContext;
+    private WeakReference<Context> mContextRef;
 
     private CrashHandler() {
     }
@@ -46,7 +46,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
     public void init(Context context) {
         mDefaultCrashHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(this);
-        mContext = new WeakReference<>(context.getApplicationContext());
+        mContextRef = new WeakReference<>(context.getApplicationContext());
     }
 
     /**
@@ -105,8 +105,8 @@ public class CrashHandler implements UncaughtExceptionHandler {
     }
 
     private void dumpPhoneInfo(PrintWriter pw) throws NameNotFoundException {
-        PackageManager pm = mContext.get().getPackageManager();
-        PackageInfo pi = pm.getPackageInfo(mContext.get().getPackageName(), PackageManager.GET_ACTIVITIES);
+        PackageManager pm = mContextRef.get().getPackageManager();
+        PackageInfo pi = pm.getPackageInfo(mContextRef.get().getPackageName(), PackageManager.GET_ACTIVITIES);
         pw.print("App Version: ");
         pw.print(pi.versionName);
         pw.print('_');

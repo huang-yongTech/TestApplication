@@ -65,6 +65,14 @@ public class CommonHostActivity extends AppCompatActivity {
                 Fragment polygonFragment = (Fragment) ARouter.getInstance().build("/presentation/spiderFragment").navigation();
                 changeFragment(polygonFragment);
                 break;
+            case Constant.TYPE_CROP_PIC:
+                Fragment cropPicFragment = (Fragment) ARouter.getInstance().build("/presentation/cropPicFragment").navigation();
+                changeFragment(cropPicFragment);
+                break;
+            case Constant.TYPE_ADVANCE_ANIM:
+                Fragment advanceAnimFragment = (Fragment) ARouter.getInstance().build("/presentation/advanceAnimFragment").navigation();
+                changeFragment(advanceAnimFragment);
+                break;
         }
     }
 

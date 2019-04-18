@@ -127,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
         mItemTypeList.add(new ItemType("RecyclerView缓存", Constant.TYPE_RECYCLER_VIEW_CACHE));
         mItemTypeList.add(new ItemType("仿即刻点赞效果", Constant.TYPE_PRAISE));
         mItemTypeList.add(new ItemType("多边形网格", Constant.TYPE_POLYGON));
+        mItemTypeList.add(new ItemType("图片裁剪动画", Constant.TYPE_CROP_PIC));
+        mItemTypeList.add(new ItemType("动画进阶", Constant.TYPE_ADVANCE_ANIM));
 
         initRecyclerView();
     }
@@ -198,6 +200,22 @@ public class MainActivity extends AppCompatActivity {
                         ARouter.getInstance()
                                 .build("/presentation/commonHost")
                                 .withBundle(Constant.TYPE_COMMON_BUNDLE, polygonBundle)
+                                .navigation();
+                        break;
+                    case Constant.TYPE_CROP_PIC:
+                        Bundle cropPicBundle = new Bundle();
+                        cropPicBundle.putString(Constant.TYPE, Constant.TYPE_CROP_PIC);
+                        ARouter.getInstance()
+                                .build("/presentation/commonHost")
+                                .withBundle(Constant.TYPE_COMMON_BUNDLE, cropPicBundle)
+                                .navigation();
+                        break;
+                    case Constant.TYPE_ADVANCE_ANIM:
+                        Bundle advanceAnimBundle = new Bundle();
+                        advanceAnimBundle.putString(Constant.TYPE, Constant.TYPE_ADVANCE_ANIM);
+                        ARouter.getInstance()
+                                .build("/presentation/commonHost")
+                                .withBundle(Constant.TYPE_COMMON_BUNDLE, advanceAnimBundle)
                                 .navigation();
                         break;
                 }
