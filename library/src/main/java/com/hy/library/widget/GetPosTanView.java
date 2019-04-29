@@ -76,7 +76,7 @@ public class GetPosTanView extends View {
 
         mAnimator = ValueAnimator.ofFloat(0, 1);
         mAnimator.setDuration(2000);
-        mAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        mAnimator.setRepeatCount(3);
         mAnimator.setRepeatMode(ValueAnimator.RESTART);
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override

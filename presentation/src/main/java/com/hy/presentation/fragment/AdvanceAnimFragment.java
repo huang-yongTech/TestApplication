@@ -1,19 +1,23 @@
 package com.hy.presentation.fragment;
 
-
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.hy.library.widget.RoundShapeDrawable;
 import com.hy.presentation.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
@@ -28,6 +32,9 @@ public class AdvanceAnimFragment extends Fragment {
 
     @BindView(R.id.public_toolbar)
     Toolbar mToolbar;
+    @BindView(R.id.advance_anim_iv)
+    AppCompatImageView mAdvanceAnimIv;
+
     Unbinder unbinder;
 
     private String mParam1;
@@ -68,6 +75,19 @@ public class AdvanceAnimFragment extends Fragment {
 
     private void init() {
         mToolbar.setTitle("动画进阶");
+
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.avator);
+        RoundShapeDrawable roundShapeDrawable = new RoundShapeDrawable(bitmap);
+        mAdvanceAnimIv.setImageDrawable(roundShapeDrawable);
+    }
+
+    @OnClick({R.id.advance_ji_ke_btn})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.advance_ji_ke_btn:
+
+                break;
+        }
     }
 
     @Override

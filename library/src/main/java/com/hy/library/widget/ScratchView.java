@@ -11,6 +11,7 @@ import android.graphics.Rect;
 import android.graphics.Shader;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -22,6 +23,8 @@ import com.hy.library.util.SizeUtils;
  * 仿刮刮卡效果view
  */
 public class ScratchView extends View {
+    private static final String TAG = "ScratchView";
+
     private Paint mPaint;
     //背景
     private Bitmap mBitmapBg;
@@ -54,6 +57,8 @@ public class ScratchView extends View {
         mBgCanvas = new Canvas();
         mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.crop_pic);
 
+        Log.i(TAG, "mBitmap: " + mBitmap);
+
         mPath = new Path();
     }
 
@@ -85,7 +90,7 @@ public class ScratchView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        //将背景绘制到目标图层上
+        //将背景绘制到目标图层上，这是自己创建的图层，不是系统view自带的图层
         if (mBitmapBg == null) {
             //这是一个透明图层
             mBitmapBg = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);

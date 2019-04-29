@@ -10,7 +10,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:overScrollMode="never">
 
         <GridLayout
             android:layout_width="match_parent"
@@ -30,8 +31,25 @@
             <android.support.v7.widget.AppCompatRadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:button="@null"
                 android:drawableStart="@drawable/assignment" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/advance_anim_iv"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@color/blue_300" />
+
+            <com.hy.library.widget.JiKePraiseView
+                android:id="@+id/advance_ji_ke_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:clickable="true"
+                android:focusable="true" />
+
         </GridLayout>
     </ScrollView>
 

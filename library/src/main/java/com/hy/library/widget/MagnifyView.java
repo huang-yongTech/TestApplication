@@ -1,15 +1,15 @@
 package com.hy.library.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.Shader;
 import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -22,15 +22,11 @@ import com.hy.library.R;
  * 放大镜效果view
  */
 public class MagnifyView extends View {
-    private Paint mPaint;
-    //背景
-    private Bitmap mBitmapBg;
     //图片
     private Bitmap mBitmap;
-    private Canvas mBgCanvas;
 
     //放大镜的半径
-    private int mRadius = 60;
+    private int mRadius = 160;
     //放大倍数
     private int mFactor = 3;
     //矩阵
@@ -38,8 +34,8 @@ public class MagnifyView extends View {
 
     private ShapeDrawable mShapeDrawable;
 
-    private float mCurrX = -1;
-    private float mCurrY = -1;
+    private int mCurrX;
+    private int mCurrY;
 
     public MagnifyView(Context context) {
         this(context, null);
@@ -55,28 +51,33 @@ public class MagnifyView extends View {
     }
 
     private void init() {
-        mPaint = new Paint();
-        mPaint.setAntiAlias(true);
-        mPaint.setStyle(Paint.Style.FILL);
-
-        mBgCanvas = new Canvas();
-        mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.crop_pic);
+        setLayerType(LAYER_TYPE_SOFTWARE, null);
 
         mMatrix = new Matrix();
-        mShapeDrawable = new ShapeDrawable();
+        mShapeDrawable = new ShapeDrawable(new OvalShape());
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                mCurrX = event.getX();
-                mCurrY = event.getY();
+                mCurrX = (int) event.getX();
+                mCurrY = (int) event.getY();
+
+                //设置shader显示区域跟随手指移动
+                mMatrix.setTranslate(mRadius - mCurrX * mFactor, mRadius - mCurrY * mFactor);
+                mShapeDrawable.getPaint().getShader().setLocalMatrix(mMatrix);
+                mShapeDrawable.setBounds(mCurrX - mRadius, mCurrY - mRadius, mCurrX + mRadius, mCurrY + mRadius);
                 postInvalidate();
                 return true;
             case MotionEvent.ACTION_MOVE:
-                mCurrX = event.getX();
-                mCurrY = event.getY();
+                mCurrX = (int) event.getX();
+                mCurrY = (int) event.getY();
+
+                //设置shader显示区域跟随手指移动
+                mMatrix.setTranslate(mRadius - mCurrX * mFactor, mRadius - mCurrY * mFactor);
+                mShapeDrawable.getPaint().getShader().setLocalMatrix(mMatrix);
+                mShapeDrawable.setBounds(mCurrX - mRadius, mCurrY - mRadius, mCurrX + mRadius, mCurrY + mRadius);
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
@@ -93,21 +94,24 @@ public class MagnifyView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (mBitmapBg == null) {
-            mBitmapBg = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+        if (mBitmap == null) {
+            mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.crop_pic);
 
-            mBgCanvas.setBitmap(mBitmapBg);
-            mBgCanvas.drawBitmap(mBitmap, null, new Rect(0, 0, getWidth(), getHeight()), mPaint);
+            if (mCurrX != -1 && mCurrY != -1) {
+                //创建放大的shader图像
+                @SuppressLint("DrawAllocation")
+                BitmapShader bitmapShader = new BitmapShader(
+                        Bitmap.createScaledBitmap(mBitmap, getWidth() * mFactor, getHeight() * mFactor, false)
+                        , Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+
+                //绘制圆形区域
+                mShapeDrawable.getPaint().setShader(bitmapShader);
+            }
         }
 
-        if (mCurrX != -1 && mCurrY != -1) {
-            mPaint.setShader(new BitmapShader(mBitmapBg, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT));
-            canvas.drawCircle(mCurrX, mCurrY, 150, mPaint);
-        }
-    }
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
+        //绘制原图
+        canvas.drawBitmap(mBitmap, 0, 0, null);
+        //绘制放大图
+        mShapeDrawable.draw(canvas);
     }
 }
