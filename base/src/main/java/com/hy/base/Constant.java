@@ -13,7 +13,7 @@ public class Constant {
     public static final String TYPE_WEB_VIEW = "type_web_view";
     public static final String TYPE_RECYCLER_VIEW = "type_recycler_view";
     public static final String TYPE_RECYCLER_VIEW_CACHE = "type_recycler_view_cache";
-    public static final String TYPE_PRAISE = "type_praise";
+    public static final String TYPE_HEN_CODER_PRACTICE = "type_praise";
     public static final String TYPE_POLYGON = "type_polygon";
     public static final String TYPE_CROP_PIC = "type_crop_pic";
     public static final String TYPE_ADVANCE_ANIM = "type_advance_anim";

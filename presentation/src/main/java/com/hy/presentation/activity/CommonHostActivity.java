@@ -57,8 +57,8 @@ public class CommonHostActivity extends AppCompatActivity {
                 Fragment cacheFragment = (Fragment) ARouter.getInstance().build("/presentation/recyclerViewCacheFragment").navigation();
                 changeFragment(cacheFragment);
                 break;
-            case Constant.TYPE_PRAISE:
-                Fragment praiseFragment = (Fragment) ARouter.getInstance().build("/presentation/praiseFragment").navigation();
+            case Constant.TYPE_HEN_CODER_PRACTICE:
+                Fragment praiseFragment = (Fragment) ARouter.getInstance().build("/presentation/henCoderFragment").navigation();
                 changeFragment(praiseFragment);
                 break;
             case Constant.TYPE_POLYGON:

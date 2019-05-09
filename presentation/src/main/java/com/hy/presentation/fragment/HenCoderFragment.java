@@ -16,10 +16,10 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * 仿即刻点赞图标界面
+ * henCoder实践界面
  */
-@Route(path = "/presentation/praiseFragment")
-public class PraiseFragment extends Fragment {
+@Route(path = "/presentation/henCoderFragment")
+public class HenCoderFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -30,15 +30,15 @@ public class PraiseFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public PraiseFragment() {
+    public HenCoderFragment() {
     }
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      */
-    public static PraiseFragment newInstance(String param1, String param2) {
-        PraiseFragment fragment = new PraiseFragment();
+    public static HenCoderFragment newInstance(String param1, String param2) {
+        HenCoderFragment fragment = new HenCoderFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -57,14 +57,14 @@ public class PraiseFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_praise, container, false);
+        View view = inflater.inflate(R.layout.fragment_hen_coder, container, false);
         unbinder = ButterKnife.bind(this, view);
         init();
         return view;
     }
 
     private void init() {
-        mToolbar.setTitle("仿即刻点赞图标");
+        mToolbar.setTitle("HenCoder实践");
     }
 
     @Override

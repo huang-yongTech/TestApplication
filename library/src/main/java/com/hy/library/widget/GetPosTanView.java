@@ -19,6 +19,7 @@ import com.hy.library.util.SizeUtils;
 
 /**
  * Created by huangyong on 2019/4/16
+ * 带箭头的旋转路径
  */
 public class GetPosTanView extends View {
     private static final String TAG = "GetPosTanView";

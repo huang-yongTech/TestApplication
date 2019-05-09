@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.hy.library.widget.JiKePraiseView;
 import com.hy.library.widget.RoundShapeDrawable;
 import com.hy.presentation.R;
 
@@ -34,6 +35,8 @@ public class AdvanceAnimFragment extends Fragment {
     Toolbar mToolbar;
     @BindView(R.id.advance_anim_iv)
     AppCompatImageView mAdvanceAnimIv;
+    @BindView(R.id.advance_ji_ke_btn)
+    JiKePraiseView mJiKeBtn;
 
     Unbinder unbinder;
 
@@ -79,6 +82,8 @@ public class AdvanceAnimFragment extends Fragment {
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.avator);
         RoundShapeDrawable roundShapeDrawable = new RoundShapeDrawable(bitmap);
         mAdvanceAnimIv.setImageDrawable(roundShapeDrawable);
+
+        mJiKeBtn.setIsLike(true);
     }
 
     @OnClick({R.id.advance_ji_ke_btn})

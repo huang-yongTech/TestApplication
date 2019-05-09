@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         mItemTypeList.add(new ItemType("WebView测试", Constant.TYPE_WEB_VIEW));
         mItemTypeList.add(new ItemType("RecyclerView测试", Constant.TYPE_RECYCLER_VIEW));
         mItemTypeList.add(new ItemType("RecyclerView缓存", Constant.TYPE_RECYCLER_VIEW_CACHE));
-        mItemTypeList.add(new ItemType("仿即刻点赞效果", Constant.TYPE_PRAISE));
+        mItemTypeList.add(new ItemType("HenCoder实践", Constant.TYPE_HEN_CODER_PRACTICE));
         mItemTypeList.add(new ItemType("多边形网格", Constant.TYPE_POLYGON));
         mItemTypeList.add(new ItemType("图片裁剪动画", Constant.TYPE_CROP_PIC));
         mItemTypeList.add(new ItemType("动画进阶", Constant.TYPE_ADVANCE_ANIM));
@@ -186,9 +186,9 @@ public class MainActivity extends AppCompatActivity {
                                 .withBundle(Constant.TYPE_COMMON_BUNDLE, recycleCacheBundle)
                                 .navigation();
                         break;
-                    case Constant.TYPE_PRAISE:
+                    case Constant.TYPE_HEN_CODER_PRACTICE:
                         Bundle praiseBundle = new Bundle();
-                        praiseBundle.putString(Constant.TYPE, Constant.TYPE_PRAISE);
+                        praiseBundle.putString(Constant.TYPE, Constant.TYPE_HEN_CODER_PRACTICE);
                         ARouter.getInstance()
                                 .build("/presentation/commonHost")
                                 .withBundle(Constant.TYPE_COMMON_BUNDLE, praiseBundle)
