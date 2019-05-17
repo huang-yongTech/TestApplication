@@ -1,5 +1,6 @@
 package com.hy.library.widget;
 
+import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.content.Context;
@@ -13,6 +14,7 @@ import android.graphics.Rect;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -47,7 +49,7 @@ public class JiKePraiseView extends View {
     private int mTextMaxMove;
     private float[] mWidths;
 
-    private ObjectAnimator mLikeBitmapAnimator, mUnLikeBitmapAnimator, mTextLikeAnimator, mTextUnLikeAnimator;
+    private AnimatorSet mLikeAnimatorSet, mUnLikeAnimatorSet;
 
     public JiKePraiseView(Context context) {
         this(context, null);
@@ -91,23 +93,26 @@ public class JiKePraiseView extends View {
         PropertyValuesHolder handLikeScaleHolder = PropertyValuesHolder.ofFloat("handScale", 1f, 0.8f, 1f);
         PropertyValuesHolder decoLikeScaleHolder = PropertyValuesHolder.ofFloat("decoScale", 0f, 1f);
         PropertyValuesHolder decoLikeAlphaHolder = PropertyValuesHolder.ofFloat("decoAlpha", 0f, 1f);
-        mLikeBitmapAnimator = ObjectAnimator.ofPropertyValuesHolder(this, handLikeScaleHolder, decoLikeScaleHolder, decoLikeAlphaHolder);
-        mLikeBitmapAnimator.setDuration(DURATION);
+        ObjectAnimator likeBitmapAnimator = ObjectAnimator.ofPropertyValuesHolder(this, handLikeScaleHolder, decoLikeScaleHolder, decoLikeAlphaHolder);
 
         //取消点赞时图标动画
         PropertyValuesHolder handUnLikeScaleHolder = PropertyValuesHolder.ofFloat("handScale", 1f, 0.8f, 1f);
         PropertyValuesHolder decoUnLikeAlphaHolder = PropertyValuesHolder.ofFloat("decoAlpha", 1f, 0f);
-        mUnLikeBitmapAnimator = ObjectAnimator.ofPropertyValuesHolder(this, handUnLikeScaleHolder, decoUnLikeAlphaHolder);
-        mUnLikeBitmapAnimator.setDuration(DURATION);
+        ObjectAnimator unLikeBitmapAnimator = ObjectAnimator.ofPropertyValuesHolder(this, handUnLikeScaleHolder, decoUnLikeAlphaHolder);
 
         PropertyValuesHolder textLikeTransHolder = PropertyValuesHolder.ofFloat("textTranslate", mTextMaxMove, 0);
         PropertyValuesHolder textAlphaHolder = PropertyValuesHolder.ofFloat("textAlpha", 0f, 1f);
-        mTextLikeAnimator = ObjectAnimator.ofPropertyValuesHolder(this, textLikeTransHolder, textAlphaHolder);
-        mTextLikeAnimator.setDuration(DURATION);
+        ObjectAnimator textLikeAnimator = ObjectAnimator.ofPropertyValuesHolder(this, textLikeTransHolder, textAlphaHolder);
 
         PropertyValuesHolder textUnLikeTransHolder = PropertyValuesHolder.ofFloat("textTranslate", -mTextMaxMove, 0);
-        mTextUnLikeAnimator = ObjectAnimator.ofPropertyValuesHolder(this, textUnLikeTransHolder, textAlphaHolder);
-        mTextUnLikeAnimator.setDuration(DURATION);
+        ObjectAnimator textUnLikeAnimator = ObjectAnimator.ofPropertyValuesHolder(this, textUnLikeTransHolder, textAlphaHolder);
+
+        mLikeAnimatorSet = new AnimatorSet();
+        mLikeAnimatorSet.playTogether(likeBitmapAnimator, textLikeAnimator);
+        mLikeAnimatorSet.setDuration(DURATION);
+        mUnLikeAnimatorSet = new AnimatorSet();
+        mUnLikeAnimatorSet.playTogether(unLikeBitmapAnimator, textUnLikeAnimator);
+        mUnLikeAnimatorSet.setDuration(DURATION);
     }
 
     @Override
@@ -123,6 +128,7 @@ public class JiKePraiseView extends View {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
 
+        //图片资源回收
         if (mThumbLikeBitmap != null) {
             mThumbLikeBitmap.recycle();
         }
@@ -139,20 +145,13 @@ public class JiKePraiseView extends View {
             mHandBitmap.recycle();
         }
 
-        if (mLikeBitmapAnimator != null && mLikeBitmapAnimator.isRunning()) {
-            mLikeBitmapAnimator.cancel();
+        //退出view时，结束动画
+        if (mLikeAnimatorSet != null && mLikeAnimatorSet.isRunning()) {
+            mLikeAnimatorSet.cancel();
         }
 
-        if (mUnLikeBitmapAnimator != null && mUnLikeBitmapAnimator.isRunning()) {
-            mUnLikeBitmapAnimator.cancel();
-        }
-
-        if (mTextLikeAnimator != null && mTextLikeAnimator.isRunning()) {
-            mTextLikeAnimator.cancel();
-        }
-
-        if (mTextUnLikeAnimator != null && mTextUnLikeAnimator.isRunning()) {
-            mTextUnLikeAnimator.cancel();
+        if (mUnLikeAnimatorSet != null && mUnLikeAnimatorSet.isRunning()) {
+            mUnLikeAnimatorSet.cancel();
         }
     }
 
@@ -330,10 +329,12 @@ public class JiKePraiseView extends View {
 
     //点赞事件处理
     private void onPressAction() {
-        if (mLikeBitmapAnimator != null && mLikeBitmapAnimator.isRunning()
-                || mUnLikeBitmapAnimator != null && mUnLikeBitmapAnimator.isRunning()
-                || mTextLikeAnimator != null && mTextLikeAnimator.isRunning()
-                || mTextUnLikeAnimator != null && mTextUnLikeAnimator.isRunning()) {
+        if (mLikeAnimatorSet == null || mUnLikeAnimatorSet == null) {
+            return;
+        }
+
+        if (mLikeAnimatorSet.isRunning()
+                || mUnLikeAnimatorSet.isRunning()) {
             return;
         }
 
@@ -342,23 +343,11 @@ public class JiKePraiseView extends View {
         if (mIsLike) {
             //点赞
             ++mPraiseNumber;
-            setPraiseNumber();
-
-            mLikeBitmapAnimator.start();
+            mLikeAnimatorSet.start();
         } else {
             //取消点赞
             --mPraiseNumber;
-            setPraiseNumber();
-
-            mUnLikeBitmapAnimator.start();
-        }
-    }
-
-    private void setPraiseNumber() {
-        if (mIsLike) {
-            mTextLikeAnimator.start();
-        } else {
-            mTextUnLikeAnimator.start();
+            mUnLikeAnimatorSet.start();
         }
     }
 
@@ -383,8 +372,8 @@ public class JiKePraiseView extends View {
 
     //文字平移
     private float textTranslate;
-    //文字透明度
-    private float textAlpha;
+    //文字透明度（默认不透明）
+    private float textAlpha = 1;
     //手指缩放（默认不缩放）
     private float handScale = 1;
     //手指上方装饰缩放

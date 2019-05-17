@@ -43,16 +43,6 @@
                 android:layout_margin="16dp"
                 android:background="@color/blue_300" />
 
-            <com.hy.library.widget.JiKePraiseView
-                android:id="@+id/advance_ji_ke_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="8dp"
-                app:praise_number="1099" />
-
         </GridLayout>
     </ScrollView>
 

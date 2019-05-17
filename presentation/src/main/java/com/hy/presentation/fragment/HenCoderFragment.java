@@ -1,14 +1,21 @@
 package com.hy.presentation.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.SuperscriptSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.hy.library.widget.RulerView;
 import com.hy.presentation.R;
 
 import butterknife.BindView;
@@ -25,6 +32,11 @@ public class HenCoderFragment extends Fragment {
 
     @BindView(R.id.public_toolbar)
     Toolbar mToolbar;
+    @BindView(R.id.bo_he_health_weight_tv)
+    AppCompatTextView mWeightTv;
+    @BindView(R.id.hen_coder_ruler_view)
+    RulerView mHenCoderView;
+
     Unbinder unbinder;
 
     private String mParam1;
@@ -65,6 +77,20 @@ public class HenCoderFragment extends Fragment {
 
     private void init() {
         mToolbar.setTitle("HenCoder实践");
+        mWeightTv.setTextColor(Color.GREEN);
+
+        mHenCoderView.setOnValueChangeListener(new RulerView.OnValueChangeListener() {
+            @Override
+            public void onValueChange(float value) {
+                String val = String.valueOf(value);
+                SpannableString spannableString = new SpannableString(val + " kg");
+                SuperscriptSpan superscriptSpan = new SuperscriptSpan();
+                RelativeSizeSpan relativeSizeSpan = new RelativeSizeSpan(0.5f);
+                spannableString.setSpan(superscriptSpan, val.length(), spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                spannableString.setSpan(relativeSizeSpan, val.length(), spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                mWeightTv.setText(spannableString);
+            }
+        });
     }
 
     @Override

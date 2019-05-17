@@ -8,5 +8,25 @@
 
     <include layout="@layout/public_toolbar" />
 
+    <com.hy.library.widget.JiKePraiseView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="8dp" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/bo_he_health_weight_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:textSize="24sp" />
+
+    <com.hy.library.widget.RulerView
+        android:id="@+id/hen_coder_ruler_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

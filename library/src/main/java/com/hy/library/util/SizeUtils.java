@@ -23,6 +23,17 @@ public final class SizeUtils {
     }
 
     /**
+     * Value of sp to value of px.
+     *
+     * @param spValue The value of sp.
+     * @return value of px
+     */
+    public static int sp2px(final float spValue) {
+        final float fontScale = Resources.getSystem().getDisplayMetrics().scaledDensity;
+        return (int) (spValue * fontScale + 0.5f);
+    }
+
+    /**
      * 获取spinner高度并设置弹出框竖直偏移量
      *
      * @param spinner 传入的spinner组件
