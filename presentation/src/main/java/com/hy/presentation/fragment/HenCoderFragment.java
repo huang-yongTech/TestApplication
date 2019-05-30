@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.hy.library.widget.BooHeRulerView;
 import com.hy.library.widget.RulerView;
 import com.hy.presentation.R;
 
@@ -32,10 +33,10 @@ public class HenCoderFragment extends Fragment {
 
     @BindView(R.id.public_toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.bo_he_health_weight_tv)
-    AppCompatTextView mWeightTv;
-    @BindView(R.id.hen_coder_ruler_view)
-    RulerView mHenCoderView;
+    @BindView(R.id.hen_coder_boo_weight_tv)
+    AppCompatTextView mBooWeightTv;
+    @BindView(R.id.hen_coder_boo_he_view)
+    BooHeRulerView mBooHeView;
 
     Unbinder unbinder;
 
@@ -77,9 +78,21 @@ public class HenCoderFragment extends Fragment {
 
     private void init() {
         mToolbar.setTitle("HenCoder实践");
-        mWeightTv.setTextColor(Color.GREEN);
 
-        mHenCoderView.setOnValueChangeListener(new RulerView.OnValueChangeListener() {
+        initBooHeView();
+    }
+
+    private void initBooHeView() {
+        mBooWeightTv.setTextColor(Color.GREEN);
+        String val = String.valueOf(mBooHeView.getCurrValue());
+        SpannableString spannableString = new SpannableString(val + " kg");
+        SuperscriptSpan superscriptSpan = new SuperscriptSpan();
+        RelativeSizeSpan relativeSizeSpan = new RelativeSizeSpan(0.5f);
+        spannableString.setSpan(superscriptSpan, val.length(), spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(relativeSizeSpan, val.length(), spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        mBooWeightTv.setText(spannableString);
+
+        mBooHeView.setOnValueChangeListener(new BooHeRulerView.OnValueChangeListener() {
             @Override
             public void onValueChange(float value) {
                 String val = String.valueOf(value);
@@ -88,7 +101,7 @@ public class HenCoderFragment extends Fragment {
                 RelativeSizeSpan relativeSizeSpan = new RelativeSizeSpan(0.5f);
                 spannableString.setSpan(superscriptSpan, val.length(), spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 spannableString.setSpan(relativeSizeSpan, val.length(), spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                mWeightTv.setText(spannableString);
+                mBooWeightTv.setText(spannableString);
             }
         });
     }

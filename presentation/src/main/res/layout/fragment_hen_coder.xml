@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,25 +9,39 @@
 
     <include layout="@layout/public_toolbar" />
 
-    <com.hy.library.widget.JiKePraiseView
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:padding="8dp" />
+        android:overScrollMode="never">
 
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/bo_he_health_weight_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
-        android:textSize="24sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <com.hy.library.widget.RulerView
-        android:id="@+id/hen_coder_ruler_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal" />
+            <com.hy.library.widget.JiKePraiseView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="8dp" />
 
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/hen_coder_boo_weight_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:textSize="24sp" />
+
+            <com.hy.library.widget.BooHeRulerView
+                android:id="@+id/hen_coder_boo_he_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                app:currValue="60"
+                app:maxValue="120"
+                app:minValue="40" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

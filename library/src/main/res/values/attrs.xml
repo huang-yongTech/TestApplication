@@ -5,11 +5,32 @@
         <attr name="is_like" format="boolean" />
     </declare-styleable>
 
+    <attr name="indicatorColor" format="color" />
+    <attr name="calibrationColor" format="color" />
+    <attr name="textColor" format="color" />
+    <attr name="bgColor" format="color" />
+    <attr name="minValue" format="float" />
+    <attr name="maxValue" format="float" />
+    <attr name="currValue" format="float" />
+
     <declare-styleable name="RulerView">
-        <attr name="indicatorColor" format="color" />
-        <attr name="calibrationColor" format="color" />
-        <attr name="textColor" format="color" />
-        <attr name="bgColor" format="color" />
+        <attr name="indicatorColor" />
+        <attr name="calibrationColor" />
+        <attr name="textColor" />
+        <attr name="bgColor" />
+        <attr name="minValue" />
+        <attr name="maxValue" />
+        <attr name="currValue" />
+    </declare-styleable>
+
+    <declare-styleable name="BooHeRulerView">
+        <attr name="indicatorColor" />
+        <attr name="calibrationColor" />
+        <attr name="textColor" />
+        <attr name="bgColor" />
+        <attr name="minValue" />
+        <attr name="maxValue" />
+        <attr name="currValue" />
     </declare-styleable>
 
     <!--自定义属性名,定义公共属性-->

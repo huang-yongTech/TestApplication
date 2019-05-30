@@ -1,11 +1,8 @@
 package com.hy.presentation.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +10,6 @@ import android.view.ViewGroup;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.hy.presentation.R;
-
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,8 +25,6 @@ public class RecyclerViewCacheFragment extends Fragment {
 
     @BindView(R.id.public_toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.fragment_recycler_view_cache)
-    RecyclerView mRecyclerView;
     Unbinder unbinder;
 
     private String mParam1;
@@ -73,14 +66,6 @@ public class RecyclerViewCacheFragment extends Fragment {
 
     private void init() {
         mToolbar.setTitle("RecyclerView缓存");
-
-        initRecyclerView();
-    }
-
-    private void initRecyclerView() {
-        Context context = Objects.requireNonNull(getContext());
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-        mRecyclerView.setLayoutManager(layoutManager);
     }
 
     @Override
