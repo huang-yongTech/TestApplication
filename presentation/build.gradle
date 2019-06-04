@@ -66,9 +66,6 @@ dependencies {
     //内存泄漏检测
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.leakcanaryVersion"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakcanaryVersion"
-    testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakcanaryVersion"
     // Optional, if you use support library fragments:
     debugImplementation "com.squareup.leakcanary:leakcanary-support-fragment:$rootProject.leakcanaryVersion"
-    releaseImplementation "com.squareup.leakcanary:leakcanary-support-fragment:$rootProject.leakcanaryVersion"
-    testImplementation "com.squareup.leakcanary:leakcanary-support-fragment:$rootProject.leakcanaryVersion"
 }

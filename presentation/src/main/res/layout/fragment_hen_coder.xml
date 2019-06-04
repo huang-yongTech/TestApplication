@@ -42,6 +42,23 @@
                 app:currValue="60"
                 app:maxValue="120"
                 app:minValue="40" />
+
+            <com.hy.library.widget.FlipBoardPageView
+                android:id="@+id/hen_coder_flip_board_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:padding="30dp" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/hen_coder_flip_board_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:text="start"
+                android:textAllCaps="false" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

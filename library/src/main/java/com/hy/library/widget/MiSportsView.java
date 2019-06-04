@@ -2,7 +2,6 @@ package com.hy.library.widget;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
@@ -33,8 +32,6 @@ import com.hy.library.util.SizeUtils;
 public class MiSportsView extends View {
     //背景paint
     private Paint mBgPaint;
-    //起始进度圆环paint
-    private Paint mProgressCirclePaint;
     //外部大圈paint
     private Paint mOuterCirclePaint;
     //内部小圈paint
@@ -42,7 +39,7 @@ public class MiSportsView extends View {
     //文字绘制paint
     private Paint mTextPaint;
     //装饰圆弧paint
-    private Paint mOvalDecoPaint;
+    private Paint mArcDecoPaint;
     //背景图片
     private Bitmap mBgBitmap;
     private Bitmap mWatchBitmap;
@@ -58,9 +55,39 @@ public class MiSportsView extends View {
     private Rect mStepTextRect;
     //对步数描述的文字矩形框
     private Rect mInfoTextRect;
+    //水平方向文字间隔
+    private int mTextGapX;
+    //竖直方向文字间隔
+    private int mTextGapY;
+    //大文字size
+    private int mLargeTextSize;
+    //小文字size
+    private int mSmallTextSize;
 
-    //动画集合
-    private AnimatorSet mAnimatorSet;
+    //初始圆弧透明度
+    private int mArcOriginAlpha;
+    //圆弧递增透明度
+    private int mArcDAlpha;
+    //初始圆弧半径大小
+    private int mArcOriginWidth = SizeUtils.dp2px(14);
+    //圆弧递增半径大小
+    private int mArcDWidth;
+
+    //画布在Y轴上的平移距离
+    private int mCanvasTranslateY = SizeUtils.dp2px(40);
+
+    private FireworksCircleGraphics mCircleGraphics;
+
+    //动画持续时间
+    private final long DURATION = 1000;
+    //起始圆环进度动画
+    private ObjectAnimator mProgressAnimator;
+    //画布上移下移动画
+    private ObjectAnimator mUpDownAnimator;
+    //画布再次上移动画
+    private ObjectAnimator mUpAnimator;
+    //圆弧装饰动画
+    private ObjectAnimator mArcDecoAnimator;
     //动画状态
     private AnimationState mAnimationState = AnimationState.LOADING;
 
@@ -75,6 +102,8 @@ public class MiSportsView extends View {
     public MiSportsView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
+        mCircleGraphics = new FireworksCircleGraphics();
+
         init();
         initAnim();
     }
@@ -82,15 +111,11 @@ public class MiSportsView extends View {
     private void init() {
         mBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-        mProgressCirclePaint = new Paint();
-        mProgressCirclePaint.setAntiAlias(true);
-        mProgressCirclePaint.setStyle(Paint.Style.STROKE);
-        mProgressCirclePaint.setStrokeWidth(SizeUtils.dp2px(1));
-
         mOuterCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mOuterCirclePaint.setStyle(Paint.Style.STROKE);
         mOuterCirclePaint.setColor(Color.WHITE);
-        mOuterCirclePaint.setStrokeWidth(SizeUtils.dp2px(12));
+        mOuterCirclePaint.setAlpha(160);
+        mOuterCirclePaint.setStrokeWidth(mArcOriginWidth);
 
         mInnerCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mInnerCirclePaint.setColor(Color.WHITE);
@@ -100,70 +125,84 @@ public class MiSportsView extends View {
         mTextPaint.setAntiAlias(true);
         mTextPaint.setColor(Color.WHITE);
 
-        mOvalDecoPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mOvalDecoPaint.setStyle(Paint.Style.STROKE);
-        mOvalDecoPaint.setAlpha(ovalDecoAlpha);
-        mOvalDecoPaint.setStrokeWidth(SizeUtils.dp2px(12));
+        mArcDecoPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mArcDecoPaint.setStyle(Paint.Style.STROKE);
+        mArcOriginAlpha = 200;
+        mArcDAlpha = -50;
+        mArcDWidth = SizeUtils.dp2px(3);
 
         mStepTextRect = new Rect();
         mInfoTextRect = new Rect();
+        mTextGapX = SizeUtils.dp2px(8);
+        mTextGapY = SizeUtils.dp2px(10);
+        mLargeTextSize = 50;
+        mSmallTextSize = 14;
 
         mBgBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mi_sports_bg);
         mWatchBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mi_sports_watch);
     }
 
     private void initAnim() {
-        //连接时外部大圈动画
-        ObjectAnimator progressAnimator = ObjectAnimator.ofFloat(this, "progressRotateDegree", 0, 540);
-        progressAnimator.setDuration(4000);
-        progressAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        //连接时动画
+        mProgressAnimator = ObjectAnimator.ofFloat(this, "progressRotateDegree", 0, 540);
+        mProgressAnimator.setDuration(DURATION * 3);
+        mProgressAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 progressRotateDegree = (float) animation.getAnimatedValue();
+                mCircleGraphics.setRotateDegree(progressRotateDegree);
+                mCircleGraphics.next();
                 invalidate();
             }
         });
-        progressAnimator.addListener(new AnimatorListenerAdapter() {
+        mProgressAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                outerCircleAlpha = 160;
-                ovalDecoAlpha = 120;
-
                 mAnimationState = AnimationState.UP1;
+
+                if (mUpDownAnimator != null) {
+                    mUpDownAnimator.start();
+                }
             }
         });
 
+        //连接完成后画布缩放与上移下移动画
         PropertyValuesHolder scaleHolder = PropertyValuesHolder.ofFloat("outerCircleScale", 1f, 1.3f, 1f);
         PropertyValuesHolder translationHolder = PropertyValuesHolder.ofInt("canvasTranslateY1",
-                0, -SizeUtils.dp2px(40), 0);
-        ObjectAnimator upDownAnimator = ObjectAnimator.ofPropertyValuesHolder(this, scaleHolder, translationHolder);
-        upDownAnimator.setDuration(1000);
-        upDownAnimator.addListener(new AnimatorListenerAdapter() {
+                0, -mCanvasTranslateY, 0);
+        mUpDownAnimator = ObjectAnimator.ofPropertyValuesHolder(this, scaleHolder, translationHolder);
+        mUpDownAnimator.setDuration(DURATION);
+        mUpDownAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                innerCircleAlpha = 255;
-
                 mAnimationState = AnimationState.STOP;
+
+                if (mUpAnimator != null) {
+                    mUpAnimator.start();
+                }
             }
         });
 
-        ObjectAnimator upAnimator = ObjectAnimator.ofInt(this, "canvasTranslateY2", 0, -SizeUtils.dp2px(40));
-        upAnimator.setDuration(500);
-        upAnimator.addListener(new AnimatorListenerAdapter() {
+        //画布再次上移动画
+        mUpAnimator = ObjectAnimator.ofInt(this, "canvasTranslateY2", 0, -mCanvasTranslateY);
+        mUpAnimator.setDuration(DURATION / 2);
+        mUpAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 mAnimationState = AnimationState.FINISH;
+
+                if (mArcDecoAnimator != null) {
+                    mArcDecoAnimator.start();
+                }
             }
         });
 
-        ObjectAnimator ovalDecoAnimator = ObjectAnimator.ofFloat(this, "ovalDecoDegree", 0, 360);
-        ovalDecoAnimator.setRepeatCount(ValueAnimator.INFINITE);
-        ovalDecoAnimator.setRepeatMode(ValueAnimator.RESTART);
-        ovalDecoAnimator.setDuration(15000);
-        ovalDecoAnimator.setInterpolator(new LinearInterpolator());
-
-        mAnimatorSet = new AnimatorSet();
-        mAnimatorSet.playSequentially(progressAnimator, upDownAnimator, upAnimator, ovalDecoAnimator);
+        //外部圆弧装饰旋转动画
+        mArcDecoAnimator = ObjectAnimator.ofFloat(this, "arcDecoDegree", 0, 360);
+        mArcDecoAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        mArcDecoAnimator.setRepeatMode(ValueAnimator.RESTART);
+        mArcDecoAnimator.setDuration(DURATION * 10);
+        mArcDecoAnimator.setInterpolator(new LinearInterpolator());
     }
 
     @Override
@@ -175,8 +214,10 @@ public class MiSportsView extends View {
 
         mCenterX = width / 2;
         mCenterY = height / 2;
+        //外部大圈半径为画布宽度的 1/3
         mOuterRadius = Math.min(width, height) * 2.0f / 6;
-        mInnerRadius = mOuterRadius * 4 / 5;
+        //内圈半径为外圈半径的 0.8
+        mInnerRadius = mOuterRadius * 0.8f;
 
         setMeasuredDimension(width, height);
     }
@@ -208,7 +249,7 @@ public class MiSportsView extends View {
 
         switch (mAnimationState) {
             case LOADING:
-                drawProgressCircle(canvas);
+                mCircleGraphics.draw(canvas);
                 drawInnerText(canvas);
                 break;
             case UP1:
@@ -242,7 +283,7 @@ public class MiSportsView extends View {
         canvas.save();
         //绘制文字
         String steps = "2274";
-        mTextPaint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 50, getResources().getDisplayMetrics()));
+        mTextPaint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, mLargeTextSize, getResources().getDisplayMetrics()));
         mTextPaint.getTextBounds(steps, 0, steps.length(), mStepTextRect);
         canvas.drawText(steps, mCenterX - (mStepTextRect.left + mStepTextRect.right) / 2.0f,
                 mCenterY - (mStepTextRect.top + mStepTextRect.bottom) / 2.0f, mTextPaint);
@@ -250,15 +291,15 @@ public class MiSportsView extends View {
         String distance = "1.5公里";
         String calorie = "34千卡";
 
-        float infoTextY = mCenterY - (mStepTextRect.top + mStepTextRect.bottom) / 2.0f + SizeUtils.dp2px(10);
-        mTextPaint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14, getResources().getDisplayMetrics()));
+        float infoTextY = mCenterY - (mStepTextRect.top + mStepTextRect.bottom) / 2.0f + mTextGapY;
+        mTextPaint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, mSmallTextSize, getResources().getDisplayMetrics()));
 
         mTextPaint.getTextBounds(distance, 0, distance.length(), mInfoTextRect);
-        canvas.drawText(distance, mCenterX - (mInfoTextRect.left + mInfoTextRect.right) - SizeUtils.dp2px(8),
+        canvas.drawText(distance, mCenterX - (mInfoTextRect.left + mInfoTextRect.right) - mTextGapX,
                 infoTextY - (mInfoTextRect.top + mInfoTextRect.bottom), mTextPaint);
 
         mTextPaint.getTextBounds(calorie, 0, calorie.length(), mInfoTextRect);
-        canvas.drawText(calorie, mCenterX + SizeUtils.dp2px(8),
+        canvas.drawText(calorie, mCenterX + mTextGapX,
                 infoTextY - (mInfoTextRect.top + mInfoTextRect.bottom), mTextPaint);
 
         //绘制竖线
@@ -266,65 +307,13 @@ public class MiSportsView extends View {
         canvas.drawLine(mCenterX, infoTextY, mCenterX, infoTextY - (mInfoTextRect.top + mInfoTextRect.bottom), mTextPaint);
 
         canvas.drawBitmap(mWatchBitmap, mCenterX - mWatchBitmap.getWidth() / 2.0f,
-                infoTextY - (mInfoTextRect.top + mInfoTextRect.bottom) + SizeUtils.dp2px(10), mTextPaint);
-    }
-
-    /**
-     * 绘制连接时候外面的圆环动画
-     */
-    private void drawProgressCircle(Canvas canvas) {
-        mProgressCirclePaint.setAlpha(progressCircleAlpha);
-        SweepGradient sweepGradient = new SweepGradient(mCenterX, mCenterY, Color.TRANSPARENT, Color.WHITE);
-        mProgressCirclePaint.setShader(sweepGradient);
-        int space = SizeUtils.dp2px(1.2f);
-
-        canvas.save();
-        canvas.rotate(180 + progressRotateDegree + 14, mCenterX, mCenterY);
-        canvas.drawCircle(mCenterX - space * 3, mCenterY + space * 2, mOuterRadius, mProgressCirclePaint);
-        canvas.restore();
-
-        canvas.save();
-        canvas.rotate(180 + progressRotateDegree + 12, mCenterX, mCenterY);
-        canvas.drawCircle(mCenterX - space * 2, mCenterY - space, mOuterRadius, mProgressCirclePaint);
-        canvas.restore();
-
-        canvas.save();
-        canvas.rotate(180 + progressRotateDegree + 10, mCenterX, mCenterY);
-        canvas.drawCircle(mCenterX - space, mCenterY - space * 3, mOuterRadius, mProgressCirclePaint);
-        canvas.restore();
-
-        canvas.save();
-        canvas.rotate(180 + progressRotateDegree + 8, mCenterX, mCenterY);
-        canvas.drawCircle(mCenterX, mCenterY + space * 2, mOuterRadius, mProgressCirclePaint);
-        canvas.restore();
-
-        canvas.save();
-        canvas.rotate(180 + progressRotateDegree + 6, mCenterX, mCenterY);
-        canvas.drawCircle(mCenterX + space, mCenterY + space, mOuterRadius, mProgressCirclePaint);
-        canvas.restore();
-
-        canvas.save();
-        canvas.rotate(180 + progressRotateDegree + 4, mCenterX, mCenterY);
-        canvas.drawCircle(mCenterX + space * 2, mCenterY + space * 3, mOuterRadius, mProgressCirclePaint);
-        canvas.restore();
-
-        canvas.save();
-        canvas.rotate(180 + progressRotateDegree + 2, mCenterX, mCenterY);
-        canvas.drawCircle(mCenterX + space * 3, mCenterY + space * 2, mOuterRadius, mProgressCirclePaint);
-        canvas.restore();
-
-        canvas.save();
-        canvas.rotate(180 + progressRotateDegree, mCenterX, mCenterY);
-        canvas.drawCircle(mCenterX * 4, mCenterY - space, mOuterRadius, mProgressCirclePaint);
-        canvas.restore();
+                infoTextY - (mInfoTextRect.top + mInfoTextRect.bottom) + mTextGapY, mTextPaint);
     }
 
     /**
      * 绘制大圈
      */
     private void drawOuterCircle(Canvas canvas) {
-        mOuterCirclePaint.setAlpha(outerCircleAlpha);
-
         canvas.save();
         canvas.scale(outerCircleScale, outerCircleScale, mCenterX, mCenterY);
         canvas.drawCircle(mCenterX, mCenterY, mOuterRadius, mOuterCirclePaint);
@@ -335,14 +324,13 @@ public class MiSportsView extends View {
      * 绘制内圈
      */
     private void drawInnerCircle(Canvas canvas) {
-        mInnerCirclePaint.setAlpha(innerCircleAlpha);
         mInnerCirclePaint.setStyle(Paint.Style.STROKE);
-
         canvas.drawArc(mCenterX - mInnerRadius, mCenterY - mInnerRadius, mCenterX + mInnerRadius, mCenterY + mInnerRadius,
                 -90, 270, false, mInnerCirclePaint);
         mInnerCirclePaint.setPathEffect(new DashPathEffect(new float[]{2, 4}, 4));
         canvas.drawArc(mCenterX - mInnerRadius, mCenterY - mInnerRadius, mCenterX + mInnerRadius, mCenterY + mInnerRadius,
                 180, 90, false, mInnerCirclePaint);
+
         mInnerCirclePaint.setStyle(Paint.Style.FILL);
         mInnerCirclePaint.setPathEffect(null);
         canvas.drawCircle(mCenterX - mInnerRadius, mCenterY, SizeUtils.dp2px(4), mInnerCirclePaint);
@@ -352,38 +340,41 @@ public class MiSportsView extends View {
      * 绘制圆弧装饰
      */
     private void drawArcDecorations(Canvas canvas) {
-        SweepGradient sweepGradient = new SweepGradient(mCenterX, mCenterY, new int[]{Color.TRANSPARENT, Color.parseColor("#77FFFFFF"), Color.TRANSPARENT},
+        SweepGradient sweepGradient = new SweepGradient(mCenterX, mCenterY,
+                new int[]{Color.TRANSPARENT, Color.parseColor("#77FFFFFF"), Color.TRANSPARENT},
                 new float[]{0, 0.25f, 0.5f});
-        mOvalDecoPaint.setShader(sweepGradient);
-        mOvalDecoPaint.setMaskFilter(new BlurMaskFilter(mOuterRadius + SizeUtils.dp2px(4), BlurMaskFilter.Blur.NORMAL));
+        mArcDecoPaint.setShader(sweepGradient);
+        mArcDecoPaint.setMaskFilter(new BlurMaskFilter(mOuterRadius + SizeUtils.dp2px(4), BlurMaskFilter.Blur.NORMAL));
 
         canvas.save();
-        canvas.rotate(ovalDecoDegree, mCenterX, mCenterY);
+
+        canvas.rotate(arcDecoDegree, mCenterX, mCenterY);
         canvas.scale(outerCircleScale, outerCircleScale, mCenterX, mCenterY);
-        if (ovalDecoAlpha > 0) {
-            mOvalDecoPaint.setAlpha(200);
-        }
+
+        mArcDecoPaint.setAlpha(mArcOriginAlpha);
+        mArcDecoPaint.setStrokeWidth(mArcOriginWidth);
         canvas.drawArc(mCenterX - mOuterRadius, mCenterY - mOuterRadius,
                 mCenterX + mOuterRadius, mCenterY + mOuterRadius,
-                0, 180, false, mOvalDecoPaint);
-        if (ovalDecoAlpha > 0) {
-            mOvalDecoPaint.setAlpha(120);
-        }
-        canvas.drawArc(mCenterX - mOuterRadius, mCenterY - mOuterRadius - SizeUtils.dp2px(4),
-                mCenterX + mOuterRadius, mCenterY + mOuterRadius + SizeUtils.dp2px(4),
-                0, 180, false, mOvalDecoPaint);
-        if (ovalDecoAlpha > 0) {
-            mOvalDecoPaint.setAlpha(80);
-        }
-        canvas.drawArc(mCenterX - mOuterRadius, mCenterY - mOuterRadius - SizeUtils.dp2px(8),
-                mCenterX + mOuterRadius, mCenterY + mOuterRadius + SizeUtils.dp2px(8),
-                0, 180, false, mOvalDecoPaint);
-        if (ovalDecoAlpha > 0) {
-            mOvalDecoPaint.setAlpha(40);
-        }
-        canvas.drawArc(mCenterX - mOuterRadius, mCenterY - mOuterRadius - SizeUtils.dp2px(12),
-                mCenterX + mOuterRadius, mCenterY + mOuterRadius + SizeUtils.dp2px(12),
-                0, 180, false, mOvalDecoPaint);
+                0, 180, false, mArcDecoPaint);
+
+        mArcDecoPaint.setAlpha(mArcOriginAlpha + mArcDAlpha);
+        mArcDecoPaint.setStrokeWidth(mArcOriginWidth + mArcDWidth);
+        canvas.drawArc(mCenterX - mOuterRadius, mCenterY - mOuterRadius - mArcDWidth,
+                mCenterX + mOuterRadius, mCenterY + mOuterRadius + mArcDWidth,
+                0, 180, false, mArcDecoPaint);
+
+        mArcDecoPaint.setAlpha(mArcOriginAlpha + mArcDAlpha * 2);
+        mArcDecoPaint.setStrokeWidth(mArcOriginWidth + mArcDWidth * 2);
+        canvas.drawArc(mCenterX - mOuterRadius, mCenterY - mOuterRadius - mArcDWidth * 2,
+                mCenterX + mOuterRadius, mCenterY + mOuterRadius + mArcDWidth * 2,
+                0, 180, false, mArcDecoPaint);
+
+        mArcDecoPaint.setAlpha(mArcOriginAlpha + mArcDAlpha * 3);
+        mArcDecoPaint.setStrokeWidth(mArcOriginWidth + mArcDWidth * 3);
+        canvas.drawArc(mCenterX - mOuterRadius, mCenterY - mOuterRadius - mArcDWidth * 3,
+                mCenterX + mOuterRadius, mCenterY + mOuterRadius + mArcDWidth * 3,
+                0, 180, false, mArcDecoPaint);
+
         canvas.restore();
     }
 
@@ -391,8 +382,8 @@ public class MiSportsView extends View {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
 
-        if (mAnimatorSet != null) {
-            mAnimatorSet.start();
+        if (mProgressAnimator != null) {
+            mProgressAnimator.start();
         }
     }
 
@@ -400,8 +391,20 @@ public class MiSportsView extends View {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
 
-        if (mAnimatorSet != null && mAnimatorSet.isRunning()) {
-            mAnimatorSet.cancel();
+        if (mProgressAnimator != null && mProgressAnimator.isRunning()) {
+            mProgressAnimator.cancel();
+        }
+
+        if (mUpDownAnimator != null && mUpDownAnimator.isRunning()) {
+            mUpDownAnimator.cancel();
+        }
+
+        if (mUpAnimator != null && mUpAnimator.isRunning()) {
+            mUpAnimator.cancel();
+        }
+
+        if (mArcDecoAnimator != null && mArcDecoAnimator.isRunning()) {
+            mArcDecoAnimator.cancel();
         }
 
         //回收bitmap资源
@@ -414,32 +417,16 @@ public class MiSportsView extends View {
         }
     }
 
-    //起始圆环透明度
-    private int progressCircleAlpha = 255;
     //连接动画中外部大圈的旋转度数
     private float progressRotateDegree;
-    //外圈的透明度
-    private int outerCircleAlpha;
     //外圈的缩放
     private float outerCircleScale = 1;
     //画布Y轴平移1
     private int canvasTranslateY1;
     //画布Y轴平移2
     private int canvasTranslateY2;
-    //内圈的透明度
-    private int innerCircleAlpha;
     //椭圆装饰沿大圈旋转度数
-    private float ovalDecoDegree;
-    //椭圆透明度
-    private int ovalDecoAlpha;
-
-    public int getProgressCircleAlpha() {
-        return progressCircleAlpha;
-    }
-
-    public void setProgressCircleAlpha(int progressCircleAlpha) {
-        this.progressCircleAlpha = progressCircleAlpha;
-    }
+    private float arcDecoDegree;
 
     public float getProgressRotateDegree() {
         return progressRotateDegree;
@@ -447,22 +434,6 @@ public class MiSportsView extends View {
 
     public void setProgressRotateDegree(float progressRotateDegree) {
         this.progressRotateDegree = progressRotateDegree;
-    }
-
-    public int getOuterCircleAlpha() {
-        return outerCircleAlpha;
-    }
-
-    public void setOuterCircleAlpha(int outerCircleAlpha) {
-        this.outerCircleAlpha = outerCircleAlpha;
-    }
-
-    public int getInnerCircleAlpha() {
-        return innerCircleAlpha;
-    }
-
-    public void setInnerCircleAlpha(int innerCircleAlpha) {
-        this.innerCircleAlpha = innerCircleAlpha;
     }
 
     public float getOuterCircleScale() {
@@ -492,23 +463,18 @@ public class MiSportsView extends View {
         invalidate();
     }
 
-    public float getOvalDecoDegree() {
-        return ovalDecoDegree;
+    public float getArcDecoDegree() {
+        return arcDecoDegree;
     }
 
-    public void setOvalDecoDegree(float ovalDecoDegree) {
-        this.ovalDecoDegree = ovalDecoDegree;
+    public void setArcDecoDegree(float arcDecoDegree) {
+        this.arcDecoDegree = arcDecoDegree;
         invalidate();
     }
 
-    public int getOvalDecoAlpha() {
-        return ovalDecoAlpha;
-    }
-
-    public void setOvalDecoAlpha(int ovalDecoAlpha) {
-        this.ovalDecoAlpha = ovalDecoAlpha;
-    }
-
+    /**
+     * 整个动画各个阶段的状态
+     */
     private enum AnimationState {
         LOADING,
         UP1,

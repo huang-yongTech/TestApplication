@@ -16,11 +16,12 @@ import android.view.ViewGroup;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.hy.library.widget.BooHeRulerView;
-import com.hy.library.widget.RulerView;
+import com.hy.library.widget.FlipBoardPageView;
 import com.hy.presentation.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
@@ -37,6 +38,8 @@ public class HenCoderFragment extends Fragment {
     AppCompatTextView mBooWeightTv;
     @BindView(R.id.hen_coder_boo_he_view)
     BooHeRulerView mBooHeView;
+    @BindView(R.id.hen_coder_flip_board_view)
+    FlipBoardPageView mFlipBoardView;
 
     Unbinder unbinder;
 
@@ -104,6 +107,11 @@ public class HenCoderFragment extends Fragment {
                 mBooWeightTv.setText(spannableString);
             }
         });
+    }
+
+    @OnClick(R.id.hen_coder_flip_board_btn)
+    public void onViewClicked() {
+        mFlipBoardView.start();
     }
 
     @Override
