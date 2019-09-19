@@ -47,7 +47,7 @@ public class FragmentTestActivity extends BaseActivity {
                 }, 2000);
             }
         } else {
-            fragmentManager.popBackStack();
+//            fragmentManager.popBackStack();
         }
     }
 

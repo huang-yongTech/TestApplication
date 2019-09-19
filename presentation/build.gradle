@@ -25,9 +25,9 @@ android {
     buildTypes {
         debug {
             //启动混淆
-            minifyEnabled true
+            minifyEnabled false
             //移除无用的resource文件
-            shrinkResources true
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
