@@ -2,7 +2,11 @@ package com.hy.presentation;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
+/**
+ * 注意该类要与aidl中的book.aidl所在路径保持一致，否则会编译出错
+ */
 public class Book implements Parcelable {
     public int mBookId;
 
@@ -39,5 +43,14 @@ public class Book implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(mBookId);
         dest.writeString(mBookName);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Book{" +
+                "mBookId=" + mBookId +
+                ", mBookName='" + mBookName + '\'' +
+                '}';
     }
 }

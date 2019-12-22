@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
@@ -129,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
         mItemTypeList.add(new ItemType("多边形网格", Constant.TYPE_POLYGON));
         mItemTypeList.add(new ItemType("图片裁剪动画", Constant.TYPE_CROP_PIC));
         mItemTypeList.add(new ItemType("动画进阶", Constant.TYPE_ADVANCE_ANIM));
+        mItemTypeList.add(new ItemType("AIDL测试", Constant.TYPE_AIDL));
 
         initRecyclerView();
     }
@@ -217,6 +220,10 @@ public class MainActivity extends AppCompatActivity {
                                 .build("/presentation/commonHost")
                                 .withBundle(Constant.TYPE_COMMON_BUNDLE, advanceAnimBundle)
                                 .navigation();
+                        break;
+                    case Constant.TYPE_AIDL:
+                        Intent aidlIntent = new Intent(MainActivity.this, AidlActivity.class);
+                        startActivity(aidlIntent);
                         break;
                 }
             }
