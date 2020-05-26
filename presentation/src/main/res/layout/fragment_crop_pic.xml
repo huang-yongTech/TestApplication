@@ -8,114 +8,118 @@
 
     <include layout="@layout/public_toolbar" />
 
-    <!--<com.hy.library.widget.SurfaceAnimView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content" />-->
+    <com.hy.library.widget.EraseAndScratchView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-    <com.hy.library.widget.FlowLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/black_light"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp">
+    <!--    <com.hy.library.widget.SurfaceAnimView-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content" />-->
 
-        <android.support.v7.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:background="@color/blue_300"
-            android:padding="4dp"
-            android:text="测试一"
-            android:textSize="14sp" />
+    <!--    <com.hy.library.widget.FlowLayout-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:background="@color/black_light"-->
+    <!--        android:paddingStart="8dp"-->
+    <!--        android:paddingEnd="8dp">-->
 
-        <android.support.v7.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:background="@color/blue_300"
-            android:padding="4dp"
-            android:text="测试文二"
-            android:textSize="14sp" />
+    <!--        <android.support.v7.widget.AppCompatTextView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_margin="4dp"-->
+    <!--            android:background="@color/blue_300"-->
+    <!--            android:padding="4dp"-->
+    <!--            android:text="测试一"-->
+    <!--            android:textSize="14sp" />-->
 
-        <android.support.v7.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:background="@color/blue_300"
-            android:padding="4dp"
-            android:text="测试文本三"
-            android:textSize="14sp" />
+    <!--        <android.support.v7.widget.AppCompatTextView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_margin="4dp"-->
+    <!--            android:background="@color/blue_300"-->
+    <!--            android:padding="4dp"-->
+    <!--            android:text="测试文二"-->
+    <!--            android:textSize="14sp" />-->
 
-        <android.support.v7.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:background="@color/blue_300"
-            android:padding="4dp"
-            android:text="测四"
-            android:textSize="14sp" />
+    <!--        <android.support.v7.widget.AppCompatTextView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_margin="4dp"-->
+    <!--            android:background="@color/blue_300"-->
+    <!--            android:padding="4dp"-->
+    <!--            android:text="测试文本三"-->
+    <!--            android:textSize="14sp" />-->
 
-        <android.support.v7.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:background="@color/blue_300"
-            android:padding="4dp"
-            android:text="测试文本五"
-            android:textSize="14sp" />
+    <!--        <android.support.v7.widget.AppCompatTextView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_margin="4dp"-->
+    <!--            android:background="@color/blue_300"-->
+    <!--            android:padding="4dp"-->
+    <!--            android:text="测四"-->
+    <!--            android:textSize="14sp" />-->
 
-        <android.support.v7.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:background="@color/blue_300"
-            android:padding="4dp"
-            android:text="测试本六"
-            android:textSize="14sp" />
+    <!--        <android.support.v7.widget.AppCompatTextView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_margin="4dp"-->
+    <!--            android:background="@color/blue_300"-->
+    <!--            android:padding="4dp"-->
+    <!--            android:text="测试文本五"-->
+    <!--            android:textSize="14sp" />-->
 
-        <android.support.v7.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:background="@color/blue_300"
-            android:padding="4dp"
-            android:text="测试文本七哈啊哈"
-            android:textSize="14sp" />
+    <!--        <android.support.v7.widget.AppCompatTextView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_margin="4dp"-->
+    <!--            android:background="@color/blue_300"-->
+    <!--            android:padding="4dp"-->
+    <!--            android:text="测试本六"-->
+    <!--            android:textSize="14sp" />-->
 
-        <android.support.v7.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:background="@color/blue_300"
-            android:padding="4dp"
-            android:text="测试文八"
-            android:textSize="14sp" />
+    <!--        <android.support.v7.widget.AppCompatTextView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_margin="4dp"-->
+    <!--            android:background="@color/blue_300"-->
+    <!--            android:padding="4dp"-->
+    <!--            android:text="测试文本七哈啊哈"-->
+    <!--            android:textSize="14sp" />-->
 
-        <android.support.v7.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:background="@color/blue_300"
-            android:padding="4dp"
-            android:text="测试文本九"
-            android:textSize="14sp" />
+    <!--        <android.support.v7.widget.AppCompatTextView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_margin="4dp"-->
+    <!--            android:background="@color/blue_300"-->
+    <!--            android:padding="4dp"-->
+    <!--            android:text="测试文八"-->
+    <!--            android:textSize="14sp" />-->
 
-        <android.support.v7.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:background="@color/blue_300"
-            android:padding="4dp"
-            android:text="测试十"
-            android:textSize="14sp" />
+    <!--        <android.support.v7.widget.AppCompatTextView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_margin="4dp"-->
+    <!--            android:background="@color/blue_300"-->
+    <!--            android:padding="4dp"-->
+    <!--            android:text="测试文本九"-->
+    <!--            android:textSize="14sp" />-->
 
-        <android.support.v7.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:background="@color/blue_300"
-            android:padding="4dp"
-            android:text="测试十一"
-            android:textSize="14sp" />
-    </com.hy.library.widget.FlowLayout>
+    <!--        <android.support.v7.widget.AppCompatTextView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_margin="4dp"-->
+    <!--            android:background="@color/blue_300"-->
+    <!--            android:padding="4dp"-->
+    <!--            android:text="测试十"-->
+    <!--            android:textSize="14sp" />-->
+
+    <!--        <android.support.v7.widget.AppCompatTextView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_margin="4dp"-->
+    <!--            android:background="@color/blue_300"-->
+    <!--            android:padding="4dp"-->
+    <!--            android:text="测试十一"-->
+    <!--            android:textSize="14sp" />-->
+    <!--    </com.hy.library.widget.FlowLayout>-->
 </LinearLayout>

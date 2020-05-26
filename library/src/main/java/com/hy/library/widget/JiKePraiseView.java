@@ -247,7 +247,7 @@ public class JiKePraiseView extends View {
         float textY = getHeight() / 2.0f - (mTextBounds.bottom + mTextBounds.top) / 2.0f;
 
         //处理前后数字长度不等的情况
-        if (textValueLength != textOldValue.length() | mTextMaxMove == 0) {
+        if (textValueLength != textOldValue.length()) {
             if (mIsLike) {
                 //点赞
                 mOldTextPaint.setAlpha((int) (255 * (1 - textAlpha)));
