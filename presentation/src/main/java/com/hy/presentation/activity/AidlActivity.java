@@ -64,7 +64,7 @@ public class AidlActivity extends AppCompatActivity {
                 Log.i(TAG, "query book list, list type : " + newList.toString());
                 bookManager.registerListener(mListener);
 
-                service.linkToDeath(mDeathRecipient, 0);
+                bookManager.asBinder().linkToDeath(mDeathRecipient, 0);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
