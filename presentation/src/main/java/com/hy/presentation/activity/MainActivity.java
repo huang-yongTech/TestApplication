@@ -8,18 +8,21 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
+
 import android.util.Log;
 import android.view.View;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.hy.base.Constant;
 import com.hy.base.util.FixMemLeak;
 import com.hy.data.entity.ItemType;
@@ -132,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
         mItemTypeList.add(new ItemType("图片裁剪动画", Constant.TYPE_CROP_PIC));
         mItemTypeList.add(new ItemType("动画进阶", Constant.TYPE_ADVANCE_ANIM));
         mItemTypeList.add(new ItemType("AIDL测试", Constant.TYPE_AIDL));
+        mItemTypeList.add(new ItemType("Fragment懒加载", Constant.TYPE_FRAGMENT_LAZY));
 
         initRecyclerView();
     }
@@ -146,9 +150,9 @@ public class MainActivity extends AppCompatActivity {
 
         adapter.setNewData(mItemTypeList);
 
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
                 ItemType itemType = mItemTypeList.get(position);
                 switch (itemType.getType()) {
                     case Constant.TYPE_FRAGMENT_TEST:
@@ -224,6 +228,14 @@ public class MainActivity extends AppCompatActivity {
                     case Constant.TYPE_AIDL:
                         Intent aidlIntent = new Intent(MainActivity.this, AidlActivity.class);
                         startActivity(aidlIntent);
+                        break;
+                    case Constant.TYPE_FRAGMENT_LAZY:
+                        Bundle fragmentLazyBundle = new Bundle();
+                        fragmentLazyBundle.putString(Constant.TYPE, Constant.TYPE_FRAGMENT_LAZY);
+                        ARouter.getInstance()
+                                .build("/presentation/commonHost")
+                                .withBundle(Constant.TYPE_COMMON_BUNDLE, fragmentLazyBundle)
+                                .navigation();
                         break;
                 }
             }

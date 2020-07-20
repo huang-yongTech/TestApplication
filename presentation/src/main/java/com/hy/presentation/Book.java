@@ -2,7 +2,7 @@ package com.hy.presentation;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * 注意该类要与aidl中的book.aidl所在路径保持一致，否则会编译出错

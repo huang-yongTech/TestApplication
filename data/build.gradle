@@ -1,19 +1,15 @@
 apply plugin: 'com.android.library'
 
 android {
-    def globalConfiguration = rootProject.extensions.getByName("ext")
-    compileSdkVersion globalConfiguration["androidCompileSdkVersion"]
-
-
+    compileSdkVersion Deps.androidCompileSdkVersion
 
     defaultConfig {
-        minSdkVersion globalConfiguration["androidMinSdkVersion"]
-        targetSdkVersion globalConfiguration["androidTargetSdkVersion"]
-        versionCode globalConfiguration["androidVersionCode"]
-        versionName globalConfiguration["androidVersionName"]
+        minSdkVersion Deps.androidMinSdkVersion
+        targetSdkVersion Deps.androidTargetSdkVersion
+        versionCode Deps.androidVersionCode
+        versionName Deps.androidVersionName
 
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner Deps.testInstrumentationRunner
 
         //指定room.schemaLocation生成的文件路径
         javaCompileOptions {
@@ -37,15 +33,15 @@ dependencies {
 
     implementation project(':base')
 
-    implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxJavaVersion"
-    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroidVersion"
+    implementation Deps.rxJavaVersion
+    implementation Deps.rxAndroidVersion
 
     //Room依赖
-    api "android.arch.persistence.room:runtime:${rootProject.archVersion}"
-    annotationProcessor "android.arch.persistence.room:compiler:${rootProject.archVersion}"
-    api "android.arch.persistence.room:rxjava2:${rootProject.archVersion}"
+    implementation Deps.roomVersion
+    annotationProcessor Deps.roomCompilerVersion
+    implementation Deps.roomRxJavaVersion
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }

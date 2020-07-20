@@ -2,8 +2,8 @@ package com.hy.presentation.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatTextView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.hy.base.util.FixMemLeak;
 import com.hy.presentation.R;

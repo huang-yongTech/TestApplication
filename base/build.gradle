@@ -1,17 +1,15 @@
 apply plugin: 'com.android.library'
 
 android {
-    def globalConfiguration = rootProject.extensions.getByName("ext")
-
-    compileSdkVersion globalConfiguration["androidCompileSdkVersion"]
+    compileSdkVersion Deps.androidCompileSdkVersion
 
     defaultConfig {
-        minSdkVersion globalConfiguration["androidMinSdkVersion"]
-        targetSdkVersion globalConfiguration["androidTargetSdkVersion"]
-        versionCode globalConfiguration["androidVersionCode"]
-        versionName globalConfiguration["androidVersionName"]
+        minSdkVersion Deps.androidMinSdkVersion
+        targetSdkVersion Deps.androidTargetSdkVersion
+        versionCode Deps.androidVersionCode
+        versionName Deps.androidVersionName
 
-        testInstrumentationRunner globalConfiguration["testInstrumentationRunner"]
+        testInstrumentationRunner Deps.testInstrumentationRunner
     }
 
     buildTypes {
@@ -26,16 +24,15 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    api "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
-    api "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
-    api "com.android.support:design:$rootProject.supportLibraryVersion"
-    api "com.android.support:support-v4:$rootProject.supportLibraryVersion"
-    api "com.android.support.constraint:constraint-layout:$rootProject.constraintLayoutVersion"
+    api Deps.appcompatVersion
+    api Deps.materialVersion
+    api Deps.supportV4Version
+    api Deps.constraintLayoutVersion
 
-    implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxJavaVersion"
-    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroidVersion"
+    implementation Deps.rxJavaVersion
+    implementation Deps.rxAndroidVersion
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }

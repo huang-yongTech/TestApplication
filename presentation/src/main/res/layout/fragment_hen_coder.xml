@@ -25,7 +25,7 @@
                 android:layout_gravity="center_horizontal"
                 android:padding="8dp" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/hen_coder_boo_weight_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
                 android:layout_marginTop="16dp"
                 android:padding="30dp" />
 
-            <android.support.v7.widget.AppCompatButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/hen_coder_flip_board_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

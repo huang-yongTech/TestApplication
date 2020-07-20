@@ -2,7 +2,7 @@ package com.hy.presentation;
 
 import android.app.Application;
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -14,7 +14,6 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
-import com.squareup.leakcanary.LeakCanary;
 import com.hy.base.util.CrashHandler;
 
 public class AndroidApplication extends Application {
@@ -31,9 +30,6 @@ public class AndroidApplication extends Application {
 
         //初始化组件路由
         setupARouter();
-
-        //内存泄漏
-        setupLeakCanary();
     }
 
     /**
@@ -53,16 +49,6 @@ public class AndroidApplication extends Application {
             ARouter.openDebug();
         }
         ARouter.init(this);
-    }
-
-    /**
-     * 内存泄漏
-     */
-    private void setupLeakCanary() {
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            return;
-        }
-        LeakCanary.install(this);
     }
 
     public static AndroidApplication getInstance() {

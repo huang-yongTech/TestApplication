@@ -1,10 +1,12 @@
 package com.hy.presentation.activity;
 
 import android.content.Intent;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -72,6 +74,10 @@ public class CommonHostActivity extends AppCompatActivity {
             case Constant.TYPE_ADVANCE_ANIM:
                 Fragment advanceAnimFragment = (Fragment) ARouter.getInstance().build("/presentation/advanceAnimFragment").navigation();
                 changeFragment(advanceAnimFragment);
+                break;
+            case Constant.TYPE_FRAGMENT_LAZY:
+                Fragment lazyFragment = (Fragment) ARouter.getInstance().build("/presentation/LazyHomeFragment").navigation();
+                changeFragment(lazyFragment);
                 break;
         }
     }

@@ -1,18 +1,17 @@
 apply plugin: 'com.android.application'
 
 android {
-    def globalConfiguration = rootProject.extensions.getByName("ext")
-
-    compileSdkVersion globalConfiguration["androidCompileSdkVersion"]
-    buildToolsVersion globalConfiguration["androidBuildToolVersion"]
+    compileSdkVersion Deps.androidCompileSdkVersion
+    buildToolsVersion Deps.androidBuildToolVersion
 
     defaultConfig {
         applicationId "com.hy.presentation"
-        minSdkVersion globalConfiguration["androidMinSdkVersion"]
-        targetSdkVersion globalConfiguration["androidTargetSdkVersion"]
-        versionCode globalConfiguration["androidVersionCode"]
-        versionName globalConfiguration["androidVersionName"]
-        testInstrumentationRunner globalConfiguration["testInstrumentationRunner"]
+        minSdkVersion Deps.androidMinSdkVersion
+        targetSdkVersion Deps.androidTargetSdkVersion
+        versionCode Deps.androidVersionCode
+        versionName Deps.androidVersionName
+
+        testInstrumentationRunner Deps.testInstrumentationRunner
 
         //指定room.schemaLocation生成的文件路径
         javaCompileOptions {
@@ -22,19 +21,42 @@ android {
             }
         }
     }
+
+    signingConfigs {
+        //注意，这里不能写debug，名字需要注意下，不然AS会无法创建Activity和Fragment
+        debugger {
+            keyAlias 'release-key'
+            keyPassword '1990huang'
+            storeFile file('../keystore/release-keystore.jks')
+            storePassword '1990huang'
+        }
+    }
+
     buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
         debug {
+            signingConfig signingConfigs.debugger
+
             //启动混淆
             minifyEnabled false
             //移除无用的resource文件
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-        release {
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+    }
+
+    dataBinding {
+        enabled = true;
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -45,28 +67,29 @@ dependencies {
     implementation project(':base')
     implementation project(':data')
 
-    implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxJavaVersion"
-    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroidVersion"
-    implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.adapterRxjavaVersion"
-    implementation "com.squareup.retrofit2:converter-gson:$rootProject.converterGsonVersion"
-    implementation "com.squareup.okhttp3:okhttp:$rootProject.okHttpVersion"
-    implementation "com.tbruyelle.rxpermissions2:rxpermissions:$rootProject.rxPermissionVersion"
-    implementation "com.jakewharton.rxbinding2:rxbinding:$rootProject.rxbindingVersion"
-    implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
-    implementation "me.yokeyword:fragmentation:$rootProject.fragmentationVersion"
-    implementation "com.github.CymChad:BaseRecyclerViewAdapterHelper:$rootProject.baseRecyclerViewAdapterHelperVersion"
-    implementation "com.scwang.smartrefresh:SmartRefreshLayout:$rootProject.smartRefreshlayoutVersion"
+    implementation Deps.rxJavaVersion
+    implementation Deps.rxAndroidVersion
+
+    implementation Deps.roomVersion
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    annotationProcessor Deps.roomCompilerVersion
+
+    implementation Deps.okHttpVersion
+    implementation Deps.retrofitVersion
+    implementation Deps.adapterRxjavaVersion
+    implementation Deps.converterGsonVersion
+    implementation Deps.rxPermissionVersion
+    implementation Deps.rxBindingVersion
+    implementation Deps.butterKnifeVersion
+    annotationProcessor Deps.butterKnifeCompilerVersion
+    implementation Deps.fragmentationVersion
+    implementation Deps.baseRecyclerViewAdapterHelperVersion
+    implementation Deps.smartRefreshlayoutVersion
 
     //组件化路由
-    implementation "com.alibaba:arouter-api:$rootProject.aRouterVersion"
-    annotationProcessor "com.alibaba:arouter-compiler:$rootProject.aRouterCompilerVersion"
+    implementation Deps.aRouterVersion
+    annotationProcessor Deps.aRouterCompilerVersion
 
     //内存泄漏检测
-    debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.leakcanaryVersion"
-    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakcanaryVersion"
-    // Optional, if you use support library fragments:
-    debugImplementation "com.squareup.leakcanary:leakcanary-support-fragment:$rootProject.leakcanaryVersion"
+    debugImplementation Deps.leakcanaryVersion
 }

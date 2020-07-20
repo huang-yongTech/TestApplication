@@ -1,0 +1,1 @@
+D:\AndroidDev\AndroidStudioProject\TestApplication\buildSrc\build\classes\kotlin\main\Deps.class;D:\AndroidDev\AndroidStudioProject\TestApplication\buildSrc\build\classes\kotlin\main\Versions.class
