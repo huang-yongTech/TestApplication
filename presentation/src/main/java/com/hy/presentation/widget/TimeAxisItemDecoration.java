@@ -5,10 +5,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Rect;
+
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.TypedValue;
 import android.view.View;
 
@@ -118,12 +122,22 @@ public class TimeAxisItemDecoration extends RecyclerView.ItemDecoration {
         }
 
         if (itemPosition != 0) {
+            mPaint.setColor(ContextCompat.getColor(parent.getContext(), R.color.black_light));
+            mPaint.setPathEffect(new DashPathEffect(new float[]{4, 4}, 0));
             canvas.drawLine(centerX, top, centerX, centerY - radius, mPaint);
         }
 
         //获取RecyclerView所有子元素的数量应该采用layoutManager.getItemCount()方法
         if (itemPosition != layoutManager.getItemCount() - 1) {
+            mPaint.setColor(ContextCompat.getColor(parent.getContext(), R.color.black_light));
+            mPaint.setPathEffect(new DashPathEffect(new float[]{4, 4}, 0));
             canvas.drawLine(centerX, centerY + radius, centerX, view.getBottom(), mPaint);
+        }
+
+        if (itemPosition == 0) {
+            mPaint.setColor(ContextCompat.getColor(parent.getContext(), R.color.red));
+        } else {
+            mPaint.setColor(ContextCompat.getColor(parent.getContext(), R.color.black_light));
         }
 
         mPaint.setStyle(Paint.Style.STROKE);
@@ -132,6 +146,7 @@ public class TimeAxisItemDecoration extends RecyclerView.ItemDecoration {
         String text = String.valueOf(itemPosition);
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setTextSize(mTextSize);
+
         mPaint.getTextBounds(text, 0, text.length(), mTextRect);
         canvas.drawText(text, centerX - ((mTextRect.right + mTextRect.left) >> 1),
                 centerY - ((mTextRect.bottom + mTextRect.top) >> 1), mPaint);
